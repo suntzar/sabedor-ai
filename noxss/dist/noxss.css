@@ -1,7 +1,7 @@
 /*!
  * Noxss v1.0
  * Copyright 2025 [Seu Nome]
- * Gerado em: 2025-06-21T05:43:05.361Z
+ * Gerado em: 2025-06-29T22:29:17.410Z
  */
 /* ==========================================================================
    Noxss Library: Core
@@ -226,6 +226,7 @@ table {
     background-color: var(--noxss-bg-surface);
     box-shadow: var(--noxss-shadow-sm);
     overflow: hidden; /* Garante que o border-radius seja aplicado às células de canto */
+    overflow-x: scroll;
 }
 
 th, td {
