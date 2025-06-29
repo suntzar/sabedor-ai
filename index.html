@@ -176,11 +176,11 @@
             <main class="noxss-layout__content" id="chat-container"></main>
 
             <footer class="chat-input-area">
-                <div id="image-preview-container" style="display: none;"></div>
+                <div id="image-preview-container" style="display: none"></div>
                 <form id="chat-form" class="noxss-form-group">
                     <textarea type="text" id="message-input" class="noxss-input" placeholder="Pergunte algo ao Gemini..." autocomplete="off" rows="1"></textarea>
                     <button type="button" id="image-upload-btn" class="noxss-btn noxss-btn--secondary" aria-label="Anexar imagens"><i data-feather="paperclip" class="noxss-icon"></i></button>
-                    <input type="file" id="image-file-input" accept="image/*" style="display: none;" multiple />
+                    <input type="file" id="image-file-input" accept="image/*" style="display: none" multiple />
                     <button id="sendButton" type="submit" class="noxss-btn noxss-btn--primary" aria-label="Enviar mensagem"><i data-feather="send" class="noxss-icon"></i></button>
                 </form>
             </footer>
@@ -188,7 +188,8 @@
 
         <!-- SCRIPTS -->
         <script src="noxss/js/core.js"></script>
-        <script src="noxss/js/components/*.js"></script> <!-- Ajuste para seus componentes Noxss -->
+        <script src="noxss/js/components/*.js"></script>
+        <!-- Ajuste para seus componentes Noxss -->
         <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js"></script>
         <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
 
@@ -196,7 +197,7 @@
             import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from "https://esm.run/@google/generative-ai";
 
             const API_KEY = "AIzaSyCxSyn1mq_zKZ5k7wLjBXfK_Gx361kZX1s";
-            const MODEL_NAME = "gemini-1.5-flash";
+            const MODEL_NAME = "gemini-2.5-flash";
 
             const chatContainer = document.getElementById("chat-container");
             const chatForm = document.getElementById("chat-form");
@@ -209,16 +210,23 @@
             const imageUploadBtn = document.getElementById("image-upload-btn");
             const imageFileInput = document.getElementById("image-file-input");
             const imagePreviewContainer = document.getElementById("image-preview-container");
-            
+
             let chat;
             let model;
             let selectedImageFiles = [];
 
             function updateDynamicContent() {
                 if (window.feather) feather.replace({ class: "noxss-icon" });
-                if (window.renderMathInElement) renderMathInElement(document.body, { delimiters: [{ left: "$$", right: "$$", display: true }, { left: "$", right: "$", display: false }], throwOnError: false });
+                if (window.renderMathInElement)
+                    renderMathInElement(document.body, {
+                        delimiters: [
+                            { left: "$$", right: "$$", display: true },
+                            { left: "$", right: "$", display: false }
+                        ],
+                        throwOnError: false
+                    });
             }
-            
+
             function addMessage(sender) {
                 const messageWrapper = document.createElement("div");
                 messageWrapper.className = `chat-message chat-message--${sender}`;
@@ -246,9 +254,9 @@
             }
 
             async function fileToGenerativePart(file) {
-                const base64EncodedDataPromise = new Promise((resolve) => {
+                const base64EncodedDataPromise = new Promise(resolve => {
                     const reader = new FileReader();
-                    reader.onloadend = () => resolve(reader.result.split(',')[1]);
+                    reader.onloadend = () => resolve(reader.result.split(",")[1]);
                     reader.readAsDataURL(file);
                 });
                 return { inlineData: { data: await base64EncodedDataPromise, mimeType: file.type } };
@@ -257,32 +265,32 @@
             async function handleChatSubmit(e) {
                 e.preventDefault();
                 const userMessageText = messageInput.value.trim();
-                
+
                 if (!userMessageText && selectedImageFiles.length === 0) return;
 
                 const userBubble = addMessage("user");
                 const currentImages = [...selectedImageFiles]; // Copia as imagens para o envio
-                
+
                 // --- Constrói a UI da mensagem do usuário ---
                 if (currentImages.length > 0) {
-                    const gallery = document.createElement('div');
-                    gallery.className = 'chat-image-gallery';
+                    const gallery = document.createElement("div");
+                    gallery.className = "chat-image-gallery";
                     currentImages.forEach(file => {
-                        const img = document.createElement('img');
+                        const img = document.createElement("img");
                         img.src = URL.createObjectURL(file);
-                        img.className = 'chat-image-attachment';
-                        img.onclick = () => window.open(img.src, '_blank');
+                        img.className = "chat-image-attachment";
+                        img.onclick = () => window.open(img.src, "_blank");
                         gallery.appendChild(img);
                     });
                     userBubble.appendChild(gallery);
                 }
 
                 if (userMessageText) {
-                    const textP = document.createElement('p');
+                    const textP = document.createElement("p");
                     textP.textContent = userMessageText;
                     userBubble.appendChild(textP);
                 }
-                
+
                 // --- Limpa os inputs e desabilita controles ---
                 messageInput.value = "";
                 clearImageSelection();
@@ -307,10 +315,9 @@
 
                     for await (const chunk of result.stream) {
                         fullResponseText += chunk.text();
-                        processBotResponse(loadingBubble, fullResponseText + ' ▋'); // Cursor piscando
+                        processBotResponse(loadingBubble, fullResponseText + " ▋"); // Cursor piscando
                     }
                     processBotResponse(loadingBubble, fullResponseText);
-
                 } catch (error) {
                     console.error("Erro ao contatar a API do Gemini:", error);
                     processBotResponse(loadingBubble, `> **Erro:** Desculpe, ocorreu um erro ao processar sua solicitação.`);
@@ -329,49 +336,52 @@
                 chat = model.startChat({
                     history,
                     generationConfig: { maxOutputTokens: 60192 },
-                    safetySettings: [{ category: HarmCategory.HARM_CATEGORY_HARASSMENT, threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE }, { category: HarmCategory.HARM_CATEGORY_HATE_SPEECH, threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE }]
+                    safetySettings: [
+                        { category: HarmCategory.HARM_CATEGORY_HARASSMENT, threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE },
+                        { category: HarmCategory.HARM_CATEGORY_HATE_SPEECH, threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE }
+                    ]
                 });
             }
 
             // --- Funções para manipulação de imagem ---
             function renderImagePreviews() {
-                imagePreviewContainer.innerHTML = '';
+                imagePreviewContainer.innerHTML = "";
                 if (selectedImageFiles.length === 0) {
-                    imagePreviewContainer.style.display = 'none';
+                    imagePreviewContainer.style.display = "none";
                     return;
                 }
-                
+
                 selectedImageFiles.forEach((file, index) => {
-                    const previewItem = document.createElement('div');
-                    previewItem.className = 'preview-item';
-                    
-                    const img = document.createElement('img');
+                    const previewItem = document.createElement("div");
+                    previewItem.className = "preview-item";
+
+                    const img = document.createElement("img");
                     img.src = URL.createObjectURL(file);
-                    img.className = 'preview-image';
-                    
-                    const removeBtn = document.createElement('button');
-                    removeBtn.className = 'remove-image-btn noxss-btn noxss-btn--icon';
+                    img.className = "preview-image";
+
+                    const removeBtn = document.createElement("button");
+                    removeBtn.className = "remove-image-btn noxss-btn noxss-btn--icon";
                     removeBtn.innerHTML = `<i data-feather="x" class="noxss-icon"></i>`;
-                    removeBtn.onclick = (e) => {
+                    removeBtn.onclick = e => {
                         e.stopPropagation();
                         removeImageFromSelection(index);
                     };
-                    
+
                     previewItem.appendChild(img);
                     previewItem.appendChild(removeBtn);
                     imagePreviewContainer.appendChild(previewItem);
                 });
-                
-                imagePreviewContainer.style.display = 'flex';
+
+                imagePreviewContainer.style.display = "flex";
                 updateDynamicContent();
             }
-            
+
             function handleImageSelected(event) {
                 const files = event.target.files;
                 if (!files) return;
 
                 for (const file of files) {
-                    if (file.type.startsWith('image/')) {
+                    if (file.type.startsWith("image/")) {
                         selectedImageFiles.push(file);
                     }
                 }
@@ -406,17 +416,19 @@
                 const genAI = new GoogleGenerativeAI(API_KEY);
                 model = genAI.getGenerativeModel({
                     model: MODEL_NAME,
-                    systemInstruction: { role: "user", parts: [{ text: systemPrompt }] },
+                    systemInstruction: { role: "user", parts: [{ text: systemPrompt }] }
                 });
                 startNewChatSession([]);
                 processBotResponse(addMessage("bot"), "Olá! Sou um chatbot com a tecnologia Gemini. Como posso te ajudar hoje?");
-                
+
                 chatForm.addEventListener("submit", handleChatSubmit);
-                downloadBtn.addEventListener("click", () => { /* Implementação omitida por brevidade */ });
+                downloadBtn.addEventListener("click", () => {
+                    /* Implementação omitida por brevidade */
+                });
                 uploadBtn.addEventListener("click", () => historyFileInput.click());
                 // historyFileInput.addEventListener("change", ...);
-                imageUploadBtn.addEventListener('click', () => imageFileInput.click());
-                imageFileInput.addEventListener('change', handleImageSelected);
+                imageUploadBtn.addEventListener("click", () => imageFileInput.click());
+                imageFileInput.addEventListener("change", handleImageSelected);
 
                 updateDynamicContent();
                 messageInput.focus();
