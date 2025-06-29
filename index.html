@@ -5,19 +5,40 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Chat com Gemini & Noxss</title>
 
-        <!-- 1. DEPENDÊNCIAS -->
+        <!-- ========================================================================= -->
+        <!-- 1. DEPENDÊNCIAS DA NOXSS E DO CHAT                                        -->
+        <!-- ========================================================================= -->
+
+        <!-- Highlight.js: Para realce de sintaxe em blocos de código (Markdown) -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+        <!-- Marked.js: Para converter a resposta em Markdown do bot para HTML -->
         <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+        <!-- Feather Icons: Para os ícones da interface -->
         <script defer src="https://unpkg.com/feather-icons"></script>
+
+        <!-- VENDORS: Dependências de estilo da biblioteca Noxss -->
         <link rel="stylesheet" href="packages/css/bootstrap.min.css" />
         <link rel="stylesheet" href="packages/css/animate.min.css" />
         <link rel="stylesheet" href="packages/css/waves.min.css" />
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css" integrity="sha384-5TcZemv2l/9On385z///+d7MSYlvIEw9FuZTIdZ14vJLqWphw7e7ZPuOiCHJcFCP" crossorigin="anonymous" />
+
+        <!-- KaTeX: Para renderização de fórmulas matemáticas (LaTeX) -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css" />
+
+        <!-- ========================================================================= -->
+        <!-- 2. BIBLIOTECA NOXSS                                                       -->
+        <!-- ========================================================================= -->
+
+        <!-- CSS Principal da Noxss -->
         <link rel="stylesheet" href="noxss/dist/noxss.css" />
 
-        <!-- 2. ESTILOS CUSTOMIZADOS PARA O CHAT -->
+        <!-- ========================================================================= -->
+        <!-- 3. ESTILOS CUSTOMIZADOS PARA O CHAT                                       -->
+        <!-- ========================================================================= -->
         <style>
+            /* Variáveis Globais de Tema (CSS Custom Properties) */
             :root {
                 --noxss-bg-main: #262626;
                 --noxss-bg-surface: #2a2a2a;
@@ -27,6 +48,8 @@
                 --noxss-accent-primary-rgb: 129, 158, 175;
                 --noxss-font-family-base: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
             }
+
+            /* Estilos do Layout Principal do Chat */
             #chat-container {
                 display: flex;
                 flex-direction: column;
@@ -48,21 +71,27 @@
             }
             #chat-form button {
                 margin: 2px 0;
-                flex-shrink: 0;
+                flex-shrink: 0; /* Impede que os botões encolham */
             }
             #message-input {
-                flex-grow: 1;
+                flex-grow: 1; /* Permite que o textarea cresça com o conteúdo */
             }
             #message-input::-webkit-resizer {
-                display: none;
+                display: none; /* Esconde o redimensionador padrão do textarea */
             }
-
+            .navbar-actions {
+                display: flex;
+                gap: 0.5rem;
+                margin-left: auto; /* Alinha os botões à direita */
+            }
+            
+            /* Estilos dos Balões de Mensagem */
             .message-bubble {
                 padding: 0.75rem 1.25rem;
                 border-radius: var(--noxss-border-radius-base);
                 max-width: 100%;
                 width: fit-content;
-                overflow: hidden; /* Evita que imagens grandes quebrem o layout */
+                overflow: hidden;
                 display: flex;
                 flex-direction: column;
                 gap: 0.75rem;
@@ -78,6 +107,8 @@
                 background-color: var(--noxss-accent-primary);
                 color: #fff;
                 border: 1px solid var(--noxss-accent-primary-hover);
+                outline: 2px solid rgba(var(--noxss-accent-primary-rgb), 0.25);
+                outline-offset: 1px;
             }
             .chat-message--bot {
                 align-items: flex-start;
@@ -94,13 +125,8 @@
                 align-items: center;
                 gap: 0.5rem;
             }
-            .navbar-actions {
-                display: flex;
-                gap: 0.5rem;
-                margin-left: auto;
-            }
 
-            /* --- ESTILOS PARA UPLOAD DE MÚLTIPLAS IMAGENS --- */
+            /* Estilos para Upload de Múltiplas Imagens */
             #image-preview-container {
                 display: flex;
                 flex-wrap: wrap;
@@ -163,20 +189,25 @@
     </head>
     <body data-noxss-layout="app">
         <div class="noxss-layout">
+            <!-- Barra de Navegação Superior -->
             <nav class="noxss-navbar">
                 <a class="noxss-navbar__brand" href="#"><i data-feather="message-square" class="noxss-icon"></i> <span>V-Oito</span></a>
                 <p class="noxss-text-secondary" style="font-size: 0.8rem; margin-left: 5px; opacity: 0.7">Powered by Noxss</p>
                 <div class="navbar-actions">
-                    <button id="download-history-btn" class="noxss-btn noxss-btn--secondary" title="Baixar Histórico"><i data-feather="download" class="noxss-icon"></i></button>
-                    <button id="upload-history-btn" class="noxss-btn noxss-btn--secondary" title="Carregar Histórico"><i data-feather="upload" class="noxss-icon"></i></button>
+                    <button id="download-history-btn" class="noxss-btn noxss-btn--secondary" title="Baixar Histórico do Chat"><i data-feather="download" class="noxss-icon"></i></button>
+                    <button id="upload-history-btn" class="noxss-btn noxss-btn--secondary" title="Carregar Histórico do Chat"><i data-feather="upload" class="noxss-icon"></i></button>
                     <input type="file" id="history-file-input" accept=".json" style="display: none" />
                 </div>
             </nav>
 
+            <!-- Container Principal das Mensagens -->
             <main class="noxss-layout__content" id="chat-container"></main>
 
+            <!-- Área de Digitação e Envio (Footer) -->
             <footer class="chat-input-area">
+                <!-- Container para pré-visualização das imagens a serem enviadas -->
                 <div id="image-preview-container" style="display: none"></div>
+                <!-- Formulário de envio -->
                 <form id="chat-form" class="noxss-form-group">
                     <textarea type="text" id="message-input" class="noxss-input" placeholder="Pergunte algo ao Gemini..." autocomplete="off" rows="1"></textarea>
                     <button type="button" id="image-upload-btn" class="noxss-btn noxss-btn--secondary" aria-label="Anexar imagens"><i data-feather="paperclip" class="noxss-icon"></i></button>
@@ -186,19 +217,32 @@
             </footer>
         </div>
 
-        <!-- SCRIPTS -->
+        <!-- ========================================================================= -->
+        <!-- 4. SCRIPTS DA APLICAÇÃO                                                   -->
+        <!-- ========================================================================= -->
+
+        <!-- Scripts da biblioteca Noxss -->
         <script src="noxss/js/core.js"></script>
-        <script src="noxss/js/components/*.js"></script>
-        <!-- Ajuste para seus componentes Noxss -->
+        <script src="noxss/js/components/tabs.js"></script>
+        <script src="noxss/js/components/fab.js"></script>
+        <script src="noxss/js/components/modals.js"></script>
+        <script src="noxss/js/components/toasts.js"></script>
+        <script src="noxss/js/components/player.js"></script>
+        <script src="noxss/js/components/typography.js"></script>
+
+        <!-- Scripts para renderização de matemática (KaTeX) -->
         <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js"></script>
         <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body);"></script>
 
+        <!-- Módulo principal do Chatbot -->
         <script type="module">
             import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from "https://esm.run/@google/generative-ai";
 
+            // --- 1. CONFIGURAÇÃO E CONSTANTES ---
             const API_KEY = "AIzaSyCxSyn1mq_zKZ5k7wLjBXfK_Gx361kZX1s";
-            const MODEL_NAME = "gemini-2.5-flash";
+            const MODEL_NAME = "gemini-2.5-flash"; // Modelo que suporta multimodalidade (texto e imagem) e contexto longo
 
+            // --- 2. SELETORES DE ELEMENTOS DO DOM ---
             const chatContainer = document.getElementById("chat-container");
             const chatForm = document.getElementById("chat-form");
             const messageInput = document.getElementById("message-input");
@@ -206,15 +250,21 @@
             const downloadBtn = document.getElementById("download-history-btn");
             const uploadBtn = document.getElementById("upload-history-btn");
             const historyFileInput = document.getElementById("history-file-input");
-
             const imageUploadBtn = document.getElementById("image-upload-btn");
             const imageFileInput = document.getElementById("image-file-input");
             const imagePreviewContainer = document.getElementById("image-preview-container");
 
-            let chat;
-            let model;
-            let selectedImageFiles = [];
+            // --- 3. VARIÁVEIS DE ESTADO GLOBAL ---
+            let chat; // Armazena a instância da sessão de chat do Gemini
+            let model; // Armazena a instância do modelo do Gemini
+            let selectedImageFiles = []; // Array para guardar os arquivos de imagem selecionados para upload
 
+            // --- 4. FUNÇÕES CENTRAIS DE UI ---
+
+            /**
+             * Re-inicializa bibliotecas dinâmicas (Feather Icons, KaTeX) após
+             * a adição de novo conteúdo ao DOM.
+             */
             function updateDynamicContent() {
                 if (window.feather) feather.replace({ class: "noxss-icon" });
                 if (window.renderMathInElement)
@@ -227,6 +277,11 @@
                     });
             }
 
+            /**
+             * Cria e adiciona um novo balão de mensagem ao chat.
+             * @param {('user'|'bot')} sender - Quem está enviando a mensagem.
+             * @returns {HTMLElement} O elemento do balão de mensagem para inserção de conteúdo.
+             */
             function addMessage(sender) {
                 const messageWrapper = document.createElement("div");
                 messageWrapper.className = `chat-message chat-message--${sender}`;
@@ -238,6 +293,12 @@
                 return messageBubble;
             }
 
+            /**
+             * Processa uma string em Markdown, a converte para HTML e a injeta em um balão de mensagem.
+             * Também encontra e estiliza os blocos de código.
+             * @param {HTMLElement} bubbleElement - O balão de mensagem onde o conteúdo será renderizado.
+             * @param {string} markdownText - O texto em Markdown a ser processado.
+             */
             function processBotResponse(bubbleElement, markdownText) {
                 bubbleElement.innerHTML = marked.parse(markdownText);
                 bubbleElement.querySelectorAll("pre code").forEach(block => {
@@ -253,6 +314,13 @@
                 if (window.Noxss && Noxss.Typography) Noxss.Typography.initCodeBlocks();
             }
 
+            // --- 5. LÓGICA DA API GEMINI E SESSÃO ---
+
+            /**
+             * Converte um objeto File para o formato GenerativePart da API do Gemini.
+             * @param {File} file - O arquivo de imagem.
+             * @returns {Promise<object>} Uma promessa que resolve para o objeto no formato da API.
+             */
             async function fileToGenerativePart(file) {
                 const base64EncodedDataPromise = new Promise(resolve => {
                     const reader = new FileReader();
@@ -262,76 +330,10 @@
                 return { inlineData: { data: await base64EncodedDataPromise, mimeType: file.type } };
             }
 
-            async function handleChatSubmit(e) {
-                e.preventDefault();
-                const userMessageText = messageInput.value.trim();
-
-                if (!userMessageText && selectedImageFiles.length === 0) return;
-
-                const userBubble = addMessage("user");
-                const currentImages = [...selectedImageFiles]; // Copia as imagens para o envio
-
-                // --- Constrói a UI da mensagem do usuário ---
-                if (currentImages.length > 0) {
-                    const gallery = document.createElement("div");
-                    gallery.className = "chat-image-gallery";
-                    currentImages.forEach(file => {
-                        const img = document.createElement("img");
-                        img.src = URL.createObjectURL(file);
-                        img.className = "chat-image-attachment";
-                        img.onclick = () => window.open(img.src, "_blank");
-                        gallery.appendChild(img);
-                    });
-                    userBubble.appendChild(gallery);
-                }
-
-                if (userMessageText) {
-                    const textP = document.createElement("p");
-                    textP.textContent = userMessageText;
-                    userBubble.appendChild(textP);
-                }
-
-                // --- Limpa os inputs e desabilita controles ---
-                messageInput.value = "";
-                clearImageSelection();
-                messageInput.disabled = true;
-                sendButton.disabled = true;
-                imageUploadBtn.disabled = true;
-
-                const loadingBubble = addMessage("bot");
-                loadingBubble.innerHTML = `<div class="typing-indicator"><span>Gemini está analisando...</span></div>`;
-
-                try {
-                    // --- Prepara os dados para a API ---
-                    const imageParts = await Promise.all(currentImages.map(file => fileToGenerativePart(file)));
-                    const promptParts = [...imageParts];
-                    if (userMessageText) {
-                        promptParts.push({ text: userMessageText });
-                    }
-
-                    const result = await chat.sendMessageStream(promptParts);
-                    let fullResponseText = "";
-                    loadingBubble.innerHTML = "";
-
-                    for await (const chunk of result.stream) {
-                        fullResponseText += chunk.text();
-                        processBotResponse(loadingBubble, fullResponseText + " ▋"); // Cursor piscando
-                    }
-                    processBotResponse(loadingBubble, fullResponseText);
-                } catch (error) {
-                    console.error("Erro ao contatar a API do Gemini:", error);
-                    processBotResponse(loadingBubble, `> **Erro:** Desculpe, ocorreu um erro ao processar sua solicitação.`);
-                    if (window.Noxss && Noxss.Toasts) Noxss.Toasts.show({ message: "Ocorreu um erro na API.", status: "danger" });
-                } finally {
-                    messageInput.disabled = false;
-                    sendButton.disabled = false;
-                    imageUploadBtn.disabled = false;
-                    messageInput.focus();
-                    chatContainer.scrollTop = chatContainer.scrollHeight;
-                    updateDynamicContent();
-                }
-            }
-
+            /**
+             * Inicia uma nova sessão de chat com o Gemini, opcionalmente com um histórico.
+             * @param {Array} history - O histórico de conversas para iniciar a sessão.
+             */
             function startNewChatSession(history) {
                 chat = model.startChat({
                     history,
@@ -343,7 +345,94 @@
                 });
             }
 
-            // --- Funções para manipulação de imagem ---
+            // --- 6. LÓGICA PRINCIPAL DO CHAT ---
+
+            /**
+             * Manipula o envio do formulário de chat.
+             * @param {Event} e - O evento de submit do formulário.
+             */
+            async function handleChatSubmit(e) {
+                e.preventDefault();
+                const userMessageText = messageInput.value.trim();
+
+                // Impede o envio de mensagens vazias (sem texto e sem imagem)
+                if (!userMessageText && selectedImageFiles.length === 0) return;
+
+                // 1. Cria o balão de mensagem do usuário e adiciona o conteúdo
+                const userBubble = addMessage("user");
+                const currentImages = [...selectedImageFiles]; // Copia as imagens para o envio
+
+                if (currentImages.length > 0) {
+                    const gallery = document.createElement("div");
+                    gallery.className = "chat-image-gallery";
+                    currentImages.forEach(file => {
+                        const img = document.createElement("img");
+                        img.src = URL.createObjectURL(file);
+                        img.className = "chat-image-attachment";
+                        img.onclick = () => window.open(img.src, "_blank"); // Abre a imagem em nova aba ao clicar
+                        gallery.appendChild(img);
+                    });
+                    userBubble.appendChild(gallery);
+                }
+
+                if (userMessageText) {
+                    const textP = document.createElement("p");
+                    textP.textContent = userMessageText;
+                    userBubble.appendChild(textP);
+                }
+
+                // 2. Limpa os inputs e desabilita os controles
+                messageInput.value = "";
+                clearImageSelection();
+                messageInput.disabled = true;
+                sendButton.disabled = true;
+                imageUploadBtn.disabled = true;
+
+                // 3. Mostra o indicador de "pensando"
+                const loadingBubble = addMessage("bot");
+                loadingBubble.innerHTML = `<div class="typing-indicator"><div class="noxss-spinner"><div class="noxss-spinner-point-1"></div><div class="noxss-spinner-point-2"></div><div class="noxss-spinner-point-3"></div></div><span>Gemini está pensando...</span></div>`;
+
+                try {
+                    // 4. Prepara e envia os dados para a API
+                    const imageParts = await Promise.all(currentImages.map(file => fileToGenerativePart(file)));
+                    const promptParts = [...imageParts];
+                    if (userMessageText) {
+                        promptParts.push({ text: userMessageText });
+                    }
+
+                    // 5. Processa a resposta em streaming da API
+                    const result = await chat.sendMessageStream(promptParts);
+                    let fullResponseText = "";
+                    loadingBubble.innerHTML = ""; // Limpa o indicador de "pensando"
+
+                    for await (const chunk of result.stream) {
+                        fullResponseText += chunk.text();
+                        // Adiciona um cursor piscando ao final para efeito de digitação
+                        processBotResponse(loadingBubble, fullResponseText + " ▋");
+                    }
+                    // Processa a resposta final sem o cursor
+                    processBotResponse(loadingBubble, fullResponseText);
+
+                } catch (error) {
+                    console.error("Erro ao contatar a API do Gemini:", error);
+                    processBotResponse(loadingBubble, `> **Erro:** Desculpe, ocorreu um erro ao processar sua solicitação.`);
+                    if (window.Noxss && Noxss.Toasts) Noxss.Toasts.show({ message: "Ocorreu um erro na API.", status: "danger" });
+                } finally {
+                    // 6. Reabilita os controles e foca no input
+                    messageInput.disabled = false;
+                    sendButton.disabled = false;
+                    imageUploadBtn.disabled = false;
+                    messageInput.focus();
+                    chatContainer.scrollTop = chatContainer.scrollHeight;
+                    updateDynamicContent();
+                }
+            }
+
+            // --- 7. FUNÇÕES DE MANIPULAÇÃO DE IMAGENS ---
+
+            /**
+             * Renderiza as pré-visualizações das imagens selecionadas.
+             */
             function renderImagePreviews() {
                 imagePreviewContainer.innerHTML = "";
                 if (selectedImageFiles.length === 0) {
@@ -376,57 +465,146 @@
                 updateDynamicContent();
             }
 
+            /**
+             * Adiciona os arquivos de imagem selecionados ao array de estado.
+             * @param {Event} event - O evento 'change' do input de arquivo.
+             */
             function handleImageSelected(event) {
                 const files = event.target.files;
                 if (!files) return;
-
                 for (const file of files) {
                     if (file.type.startsWith("image/")) {
                         selectedImageFiles.push(file);
                     }
                 }
                 renderImagePreviews();
-                event.target.value = null;
+                event.target.value = null; // Permite selecionar o mesmo arquivo novamente
             }
 
+            /**
+             * Remove uma imagem da seleção pelo seu índice.
+             * @param {number} index - O índice da imagem a ser removida.
+             */
             function removeImageFromSelection(index) {
                 selectedImageFiles.splice(index, 1);
                 renderImagePreviews();
             }
 
+            /**
+             * Limpa todas as imagens selecionadas e esconde a área de pré-visualização.
+             */
             function clearImageSelection() {
                 selectedImageFiles = [];
                 renderImagePreviews();
             }
 
+            // --- 8. FUNÇÕES DE HISTÓRICO DO CHAT ---
+
+            /**
+             * Baixa o histórico atual do chat como um arquivo JSON.
+             */
+            async function handleDownloadHistory() {
+                if (!chat) return;
+                const historyToSave = await chat.getHistory();
+                const historyJson = JSON.stringify(historyToSave, null, 2);
+                const blob = new Blob([historyJson], { type: "application/json" });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = `chat-history-sabedor-${new Date().toISOString()}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }
+
+            /**
+             * Manipula a seleção de um arquivo de histórico para upload.
+             * @param {Event} event - O evento 'change' do input de histórico.
+             */
+            function handleHistoryFileSelected(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = e => {
+                    try {
+                        const loadedHistory = JSON.parse(e.target.result);
+                        if (!Array.isArray(loadedHistory) || loadedHistory.some(turn => !turn.role || !turn.parts)) {
+                            throw new Error("Formato de histórico inválido.");
+                        }
+                        startNewChatSession(loadedHistory);
+                        rebuildChatUIFromHistory(loadedHistory);
+                        if (window.Noxss && Noxss.Toasts) Noxss.Toasts.show({ message: "Histórico carregado com sucesso!", status: "success" });
+                    } catch (error) {
+                        console.error("Erro ao carregar histórico:", error);
+                        if (window.Noxss && Noxss.Toasts) Noxss.Toasts.show({ message: "Falha ao carregar o arquivo. Verifique se é um JSON válido.", status: "danger" });
+                    }
+                };
+                reader.readAsText(file);
+                event.target.value = null;
+            }
+
+            /**
+             * Reconstrói a interface do chat a partir de um array de histórico.
+             * @param {Array} history - O histórico de conversas.
+             */
+            function rebuildChatUIFromHistory(history) {
+                chatContainer.innerHTML = "";
+                processBotResponse(addMessage("bot"), "Olá! Um histórico de chat anterior foi carregado.");
+
+                history.forEach(turn => {
+                    // Ignora o prompt inicial do sistema para não poluir a UI
+                    if (turn.role === "user" && turn.parts[0].text && turn.parts[0].text.startsWith("Aqui está a documentação")) return;
+                    
+                    const bubble = addMessage(turn.role === "user" ? "user" : "bot");
+                    
+                    // Concatena todas as partes de texto. A reconstrução de imagens do histórico não é suportada.
+                    const fullText = turn.parts.map(part => part.text || "").join("\n");
+                    if (fullText) {
+                        processBotResponse(bubble, fullText);
+                    }
+                });
+                
+                updateDynamicContent();
+                setTimeout(() => { chatContainer.scrollTop = chatContainer.scrollHeight; }, 100);
+            }
+            
+            // --- 9. INICIALIZAÇÃO DA APLICAÇÃO ---
+
+            /**
+             * Função principal que inicializa o chatbot.
+             */
             async function initializeChatApp() {
                 let systemPrompt;
                 try {
+                    // Carrega os arquivos de contexto em paralelo
                     const [docResponse, promptResponse] = await Promise.all([fetch("./doc.txt"), fetch("./prompt.txt")]);
-                    if (!docResponse.ok || !promptResponse.ok) throw new Error(`Erro ao carregar arquivos.`);
+                    if (!docResponse.ok || !promptResponse.ok) throw new Error(`Erro ao carregar arquivos de contexto.`);
                     const docContent = await docResponse.text();
                     const promptContent = await promptResponse.text();
-                    systemPrompt = `Aqui está a documentação... ${docContent}\n\n\n${promptContent}`;
+                    systemPrompt = "Aqui está a documentação da biblioteca Noxss para sua referência:\n\n" + docContent + "\n\n\n" + promptContent;
                 } catch (error) {
-                    console.error("Erro fatal:", error);
-                    processBotResponse(addMessage("bot"), "<strong>Erro:</strong> Não foi possível carregar arquivos base.");
+                    console.error("Erro fatal na inicialização:", error);
+                    processBotResponse(addMessage("bot"), "<strong>Erro:</strong> Não foi possível carregar os arquivos base para configurar o assistente.");
                     return;
                 }
 
+                // Configura a API do Gemini
                 const genAI = new GoogleGenerativeAI(API_KEY);
                 model = genAI.getGenerativeModel({
                     model: MODEL_NAME,
                     systemInstruction: { role: "user", parts: [{ text: systemPrompt }] }
                 });
-                startNewChatSession([]);
-                processBotResponse(addMessage("bot"), "Olá! Sou um chatbot com a tecnologia Gemini. Como posso te ajudar hoje?");
 
+                // Inicia a primeira sessão de chat e exibe a mensagem de boas-vindas
+                startNewChatSession([]);
+                processBotResponse(addMessage("bot"), "Olá! Sou o Sabedor, um chatbot com a tecnologia Gemini. Como posso te ajudar hoje?");
+
+                // Anexa os event listeners aos elementos da UI
                 chatForm.addEventListener("submit", handleChatSubmit);
-                downloadBtn.addEventListener("click", () => {
-                    /* Implementação omitida por brevidade */
-                });
+                downloadBtn.addEventListener("click", handleDownloadHistory);
                 uploadBtn.addEventListener("click", () => historyFileInput.click());
-                // historyFileInput.addEventListener("change", ...);
+                historyFileInput.addEventListener("change", handleHistoryFileSelected);
                 imageUploadBtn.addEventListener("click", () => imageFileInput.click());
                 imageFileInput.addEventListener("change", handleImageSelected);
 
@@ -434,9 +612,9 @@
                 messageInput.focus();
             }
 
-            document.addEventListener("DOMContentLoaded", () => {
-                initializeChatApp();
-            });
+            // Ponto de entrada: espera o DOM estar pronto para iniciar a aplicação.
+            document.addEventListener("DOMContentLoaded", initializeChatApp);
+
         </script>
     </body>
 </html>
