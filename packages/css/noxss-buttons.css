@@ -1,0 +1,205 @@
+/* packages/css/noxss-buttons.css */
+
+/* -------------------------------------------------------------------------- */
+/*                 NOXSS BUTTONS: VARIÁVEIS GLOBAIS (DEPENDÊNCIAS)            */
+/* -------------------------------------------------------------------------- */
+/* Este módulo espera que as seguintes variáveis globais de noxss.css estejam
+   disponíveis. Adicionamos novas variáveis semânticas para extensibilidade. */
+:root {
+    /* Cores de noxss.css */
+    --noxss-bg-main: var(--bg-main, #181818);
+    --noxss-bg-surface: var(--bg-surface, #202020);
+    --noxss-text-primary: var(--text-primary, #c9d1d9);
+    --noxss-text-secondary: var(--text-secondary, #8b949e);
+    --noxss-text-on-accent: var(--text-on-accent, #ffffff);
+    --noxss-border-color: var(--border-color, #383838);
+    --noxss-accent-primary: var(--accent-primary, #58a6ff);
+    --noxss-accent-primary-hover: var(--accent-primary-hover, #79c0ff);
+    --noxss-accent-primary-rgb: var(--accent-primary-rgb, 88, 166, 255);
+    --noxss-icon-color: var(--icon-color, var(--noxss-text-secondary));
+
+    /* Novas cores semânticas (para botões e outros componentes) */
+    --noxss-danger-color: var(--danger-color, #f85149);
+    --noxss-danger-color-hover: var(--danger-color-hover, #da3633);
+    --noxss-danger-color-rgb: var(--danger-color-rgb, 248, 81, 73);
+
+    /* Variáveis de Foco e Fonte de noxss.css */
+    --noxss-focus-ring-color: rgba(var(--noxss-accent-primary-rgb), 0.4);
+    --noxss-font-family-base: var(--font-family-base, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif);
+    --noxss-border-radius-base: var(--border-radius-base, 6px);
+
+    /* -------------------------------------------------------------------------- */
+    /*                   NOXSS BUTTONS: VARIÁVEIS DO COMPONENTE                   */
+    /* -------------------------------------------------------------------------- */
+    --noxss-btn-padding-y: 0.6em;
+    --noxss-btn-padding-x: 1.2em;
+    --noxss-btn-font-size: 0.95rem;
+    --noxss-btn-font-weight: 600;
+    --noxss-btn-line-height: 1.5;
+    --noxss-btn-border-radius: var(--noxss-border-radius-base);
+    --noxss-btn-transition: 150ms ease-in-out;
+    --noxss-btn-icon-size: 1.1em;
+}
+
+/* -------------------------------------------------------------------------- */
+/*                         NOXSS BUTTONS: CLASSE BASE                         */
+/* -------------------------------------------------------------------------- */
+.noxss-btn {
+    /* Estrutura e Alinhamento */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
+    vertical-align: middle;
+
+    /* Tipografia */
+    font-family: var(--noxss-font-family-base);
+    font-size: var(--noxss-btn-font-size);
+    font-weight: var(--noxss-btn-font-weight);
+    line-height: var(--noxss-btn-line-height);
+
+    /* Espaçamento e Borda */
+    padding: var(--noxss-btn-padding-y) var(--noxss-btn-padding-x);
+    border: 1px solid transparent;
+    border-radius: var(--noxss-btn-border-radius);
+
+    /* Comportamento e Aparência */
+    text-decoration: none;
+    white-space: nowrap;
+    user-select: none;
+    transition:
+        color var(--noxss-btn-transition),
+        background-color var(--noxss-btn-transition),
+        border-color var(--noxss-btn-transition),
+        transform var(--noxss-btn-transition),
+        box-shadow var(--noxss-btn-transition);
+}
+
+/* --- Estados da Classe Base --- */
+
+.noxss-btn:hover:not(:disabled) {
+    /*transform: translateY(-2px);*/
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.noxss-btn:active:not(:disabled) {
+    /*transform: translateY(0);*/
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.15);
+}
+
+/* Foco acessível e consistente */
+.noxss-btn:focus-visible {
+    outline: 2px solid var(--noxss-focus-ring-color);
+    outline-offset: 2px;
+}
+
+.noxss-btn:disabled,
+.noxss-btn.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Ícones dentro dos botões */
+.noxss-btn .feather,
+.noxss-btn svg {
+    width: var(--noxss-btn-icon-size);
+    height: var(--noxss-btn-icon-size);
+    stroke-width: 2.5; /* Ícones um pouco mais grossos */
+}
+
+/* -------------------------------------------------------------------------- */
+/*                     NOXSS BUTTONS: MODIFICADORES DE ESTILO                 */
+/* -------------------------------------------------------------------------- */
+
+/* --- Botão Primário (Ação Principal) --- */
+.noxss-btn-primary {
+    background-color: var(--noxss-accent-primary);
+    border-color: var(--noxss-accent-primary);
+    color: var(--noxss-text-on-accent);
+}
+
+.noxss-btn-primary:hover:not(:disabled) {
+    background-color: var(--noxss-accent-primary-hover);
+    border-color: var(--noxss-accent-primary-hover);
+}
+
+/* --- Botão Ghost (Ação Secundária) --- */
+.noxss-btn-ghost {
+    background-color: transparent;
+    border-color: var(--noxss-border-color);
+    color: var(--noxss-text-secondary);
+}
+
+.noxss-btn-ghost:hover:not(:disabled) {
+    background-color: rgba(var(--noxss-accent-primary-rgb), 0.15);
+    border-color: var(--noxss-accent-primary);
+    color: var(--noxss-text-primary);
+}
+
+/* --- Botão de Perigo (Ação Destrutiva) --- */
+.noxss-btn-danger {
+    background-color: var(--noxss-danger-color);
+    border-color: var(--noxss-danger-color);
+    color: var(--noxss-text-on-accent);
+}
+
+.noxss-btn-danger:hover:not(:disabled) {
+    background-color: var(--noxss-danger-color-hover);
+    border-color: var(--noxss-danger-color-hover);
+}
+
+/* -------------------------------------------------------------------------- */
+/*                  NOXSS BUTTONS: MODIFICADORES DE COMPORTAMENTO             */
+/* -------------------------------------------------------------------------- */
+
+/* --- Botão com estilo de Link --- */
+.noxss-btn-link {
+    padding: 0;
+    border: none;
+    background: none;
+    color: var(--noxss-accent-primary);
+    text-decoration: underline;
+    font-weight: 400; /* Links geralmente não são bold */
+    vertical-align: baseline;
+    box-shadow: none; /* Remove sombra da classe base */
+    transform: none; /* Remove transform da classe base */
+}
+
+.noxss-btn-link:hover:not(:disabled) {
+    color: var(--noxss-accent-primary-hover);
+    transform: none;
+    box-shadow: none;
+}
+
+/* --- Botão de Ícone (Circular) --- */
+.noxss-btn-icon {
+    padding: 0; /* O tamanho é controlado por width/height */
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: transparent;
+    border-color: transparent;
+    color: var(--noxss-icon-color);
+    transform: none; /* Remove transform da classe base */
+    box-shadow: none; /* Remove sombra da classe base */
+}
+
+.noxss-btn-icon .feather,
+.noxss-btn-icon svg {
+    width: 22px; /* Ícone um pouco maior para o espaço */
+    height: 22px;
+}
+
+.noxss-btn-icon:hover:not(:disabled) {
+    background-color: var(--noxss-bg-surface);
+    color: var(--noxss-text-primary);
+    transform: none;
+    box-shadow: none;
+}
+
+.noxss-btn-icon.active {
+    color: var(--noxss-accent-primary);
+    background-color: rgba(var(--noxss-accent-primary-rgb), 0.1);
+}

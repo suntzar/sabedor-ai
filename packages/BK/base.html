@@ -1,0 +1,994 @@
+<!doctype html>
+<html lang="pt-br" data-bs-theme="dark">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Template Base de Aplicativo com Abas</title>
+
+        <!-- Frameworks e Bibliotecas (Local) -->
+        <!-- Bootstrap 5 CSS para layout e componentes básicos -->
+        <link rel="stylesheet" href="packages/css/bootstrap.min.css" />
+        <!-- Animate.css para animações sutis (como o fade-in das abas) -->
+        <link rel="stylesheet" href="packages/css/animate.min.css" />
+        <!-- Waves.js CSS para efeito ripple em botões e elementos clicáveis -->
+        <link rel="stylesheet" href="packages/css/waves.min.css" />
+        <!-- Noxss.js CSS para layout e componentes básicos -->
+        <link rel="stylesheet" href="packages/css/noxss.css" />
+        <link rel="stylesheet" href="packages/css/noxss-typography.css" />
+
+        <!-- Estilos Customizados do Template -->
+        <style>
+            /* -------------------------------------------------------------------------- */
+            /*                        VARIÁVEIS GLOBAIS DE ESTILO                         */
+            /* -------------------------------------------------------------------------- */
+            /* Estas variáveis controlam o tema visual do template.
+   Inspirado em um design "Prisma" (escuro e limpo). */
+            :root {
+                /* Cores Base de Fundo */
+                --bg-main: #181818; /* Fundo principal da página */
+                --bg-surface: #202020; /* Fundo de superfícies de conteúdo (ex: painéis de aba) */
+                --bg-elements: #262626; /* Fundo de elementos como navbar, cabeçalho de abas, rodapé */
+
+                /* Cores de Texto */
+                --text-primary: #c9d1d9; /* Cor principal do texto */
+                --text-secondary: #8b949e; /* Cor secundária para textos menos importantes, placeholders */
+                --text-on-accent: #ffffff; /* Cor do texto sobre fundos de destaque (ex: botões primários) */
+
+                /* Cores de Bordas */
+                --border-color: #383838; /* Cor padrão para bordas e divisores */
+
+                /* Cores de Destaque (Accent) */
+                --accent-primary: #58a6ff; /* Cor principal(alternativa #4eb677) de destaque (links, abas ativas, foco) */
+                --accent-primary-rgb: 88, 166, 255; /* Versão RGB para uso em 'rgba()' (ex: box-shadow) */
+                --accent-action: #238636; /* Cor para ações primárias (ex: botão "Salvar") */
+                --accent-action-hover: #2ea043; /* Cor de hover para ações primárias */
+
+                /* Cores de Botões e Interação */
+                --button-bg: #21262d; /* Fundo padrão de botões */
+                --button-hover-bg: #30363d; /* Fundo de botões no hover */
+                --button-border-color: #30363d; /* Cor da borda de botões padrão */
+
+                /* Cores de Ícones */
+                --icon-color: var(--text-secondary); /* Cor padrão para ícones */
+                --icon-color-active: var(--accent-primary); /* Cor para ícones ativos ou em destaque */
+
+                /* Outros */
+                --font-family-base: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+                --focus-ring-color: rgba(var(--accent-primary-rgb), 0.25); /* Sombra para estado de foco */
+                --border-radius-base: 6px; /* Raio de borda padrão para elementos */
+
+                /* Bootstrap Palete */
+                --bs-body-bg: var(--bg-elements);
+            }
+
+            /* -------------------------------------------------------------------------- */
+            /*                                RESET BÁSICO                                */
+            /* -------------------------------------------------------------------------- */
+            *,
+            *::before,
+            *::after {
+                margin: 0;
+                padding: 0;
+                box-sizing: border-box;
+            }
+
+            body {
+                font-family: var(--font-family-base);
+                background-color: var(--bg-main);
+                color: var(--text-primary);
+                -webkit-font-smoothing: antialiased;
+                -moz-osx-font-smoothing: grayscale;
+                overflow-x: hidden; /* Previne scroll horizontal indesejado no body */
+                display: flex;
+                flex-direction: column;
+                height: 100vh; /* Garante que o body ocupe TODA a altura da viewport */
+                overflow-y: hidden; /* IMPEDE o body de ter scroll vertical */
+            }
+
+            /* -------------------------------------------------------------------------- */
+            /*                         ESTRUTURA PRINCIPAL DO APP                         */
+            /* -------------------------------------------------------------------------- */
+            .app-container {
+                display: flex;
+                flex-direction: column;
+                height: 100%; /* Ocupa toda a altura do body (que é 100vh) */
+                width: 100%;
+                overflow: hidden; /* Garante que o container principal não ultrapasse seus limites */
+            }
+
+            .app-navbar {
+                background-color: var(--bg-elements);
+                padding: 15px 20px;
+                border-bottom: 1px solid var(--border-color);
+                display: flex;
+                align-items: center;
+                position: sticky; /* Fixa a navbar no topo ao rolar */
+                top: 0;
+                z-index: 1030; /* Garante que fique acima de outros conteúdos, mas abaixo de modais Bootstrap */
+                flex-shrink: 0; /* Importante: impede que a navbar seja esmagada por outros itens flex */
+            }
+
+            .app-navbar .navbar-brand {
+                color: var(--text-primary);
+                font-size: 1.5em;
+                font-weight: 600;
+                text-decoration: none;
+                margin: 0;
+                display: flex;
+                align-items: center;
+            }
+
+            .app-navbar .navbar-brand .feather {
+                margin-right: 10px;
+                color: var(--accent-primary); /* Ícone com cor de destaque */
+                width: 24px;
+                height: 24px;
+            }
+
+            .app-content-wrapper {
+                /* Renomeado de content-wrapper para maior clareza */
+                flex: 1; /* Permite que esta área cresça para ocupar o espaço disponível */
+                overflow: hidden; /* Crucial: este wrapper não deve rolar */
+                display: flex;
+                flex-direction: column;
+                min-height: 0; /* Chave! Permite que este item flex encolha e passe a restrição de altura */
+            }
+
+            /* -------------------------------------------------------------------------- */
+            /*                              SISTEMA DE ABAS (TABS)                        */
+            /* -------------------------------------------------------------------------- */
+            .app-tabs-container {
+                /* Renomeado de tab-container */
+                flex: 1; /* Ocupa o espaço vertical restante no app-content-wrapper */
+                display: flex;
+                flex-direction: column;
+                min-height: 0; /* Chave! Permite que este item flex encolha e passe a restrição de altura */
+                overflow: hidden; /* Garante que o container das abas não transborde */
+            }
+
+            /* Cabeçalho das Abas (Visível em Desktop) */
+            /* Utiliza classes Bootstrap 'd-none d-md-flex' para controle de visibilidade */
+            .app-tabs-header {
+                background-color: var(--bg-elements);
+                border-bottom: 1px solid var(--border-color);
+                justify-content: flex-start; /* Alinha abas à esquerda */
+                padding: 0 10px; /* Espaçamento lateral */
+                flex-shrink: 0; /* Importante: impede que o header das abas seja esmagado */
+            }
+
+            .app-tabs-header .tab-button {
+                flex: 0 1 auto; /* Permite que as abas tenham larguras baseadas no conteúdo */
+                padding: 12px 18px;
+                border: none;
+                border-bottom: 3px solid transparent; /* Indicador sutil para aba ativa */
+                background: none;
+                color: var(--text-secondary);
+                cursor: pointer;
+                font-size: 0.95em;
+                font-weight: 500;
+                transition:
+                    color 0.2s ease,
+                    border-color 0.2s ease;
+                display: flex;
+                align-items: center;
+                margin-right: 5px; /* Pequeno espaço entre os botões de aba */
+            }
+            .app-tabs-header .tab-button .feather {
+                margin-right: 8px;
+                width: 18px;
+                height: 18px;
+                color: var(--icon-color);
+                transition: color 0.2s ease;
+            }
+            .app-tabs-header .tab-button:hover {
+                color: var(--text-primary);
+            }
+            .app-tabs-header .tab-button:hover .feather {
+                color: var(--icon-color-active);
+            }
+            .app-tabs-header .tab-button.active,
+            .app-tabs-header .tab-button:focus {
+                /* Estilo de foco para acessibilidade */
+                color: var(--accent-primary);
+                border-bottom-color: var(--accent-primary);
+                outline: none;
+            }
+            .app-tabs-header .tab-button.active .feather {
+                color: var(--icon-color-active);
+            }
+
+            /* Container do Conteúdo das Abas (com scroll/swipe) */
+            .app-tabs-content-area {
+                /* Renomeado de tab-content-container */
+                flex: 1; /* Ocupa o espaço vertical restante no app-tabs-container */
+                display: flex; /* Para alinhar os .tab-panel-content horizontalmente */
+                overflow-x: auto; /* Permite scroll horizontal (swipe entre abas) */
+                overflow-y: hidden; /* MUITO IMPORTANTE: este container NÃO deve ter scroll vertical */
+                scroll-snap-type: x mandatory; /* Efeito de "snap" ao rolar para a próxima aba */
+                scroll-behavior: smooth; /* Rolagem suave (controlada principalmente via JS) */
+                -webkit-overflow-scrolling: touch; /* Melhora a experiência de scroll em iOS */
+                background-color: var(--bg-surface); /* Fundo da área onde o conteúdo das abas é exibido */
+                min-height: 0; /* Chave! Permite que este item flex encolha e passe a restrição de altura */
+            }
+
+            /* Painel de Conteúdo Individual de cada Aba */
+            .tab-panel-content {
+                /* Renomeado de tab-content */
+                flex: 0 0 100%; /* Cada painel ocupa 100% da LARGURA do .app-tabs-content-area */
+                height: 100%; /* Cada painel ocupa 100% da ALTURA disponível no .app-tabs-content-area */
+                scroll-snap-align: start; /* Alinha o início do painel com o container no snap */
+                scroll-snap-stop: always; /* Garante que o scroll pare exatamente no painel */
+                overflow-y: auto; /* PERMITE scroll vertical DENTRO de cada painel de aba */
+                padding: 25px; /* Espaçamento interno do conteúdo */
+                opacity: 0; /* Estado inicial para animação de fade-in (controlado via JS e Animate.css) */
+                /* box-sizing: border-box; é aplicado globalmente, então padding está incluído na altura */
+            }
+
+            /* Estilos para Títulos dentro dos Painéis de Aba */
+            .tab-panel-content h2,
+            .tab-panel-content h4 {
+                /* h4 usado como exemplo, ajuste conforme necessário */
+                font-size: 1.4em;
+                font-weight: 600;
+                margin-bottom: 20px;
+                color: var(--text-primary);
+                display: flex;
+                align-items: center;
+            }
+            .tab-panel-content h2 .feather,
+            .tab-panel-content h4 .feather {
+                margin-right: 10px;
+                width: 22px;
+                height: 22px;
+                color: var(--icon-color);
+            }
+
+            /* -------------------------------------------------------------------------- */
+            /*                        NAVEGAÇÃO INFERIOR (MOBILE)                         */
+            /* -------------------------------------------------------------------------- */
+            /* Utiliza classes Bootstrap 'd-flex d-md-none' para controle de visibilidade */
+            .app-bottom-nav {
+                background-color: var(--bg-elements);
+                justify-content: space-around; /* Distribui os botões igualmente */
+                align-items: center;
+                padding: 8px 0;
+                position: sticky; /* Fixa no rodapé */
+                bottom: 0;
+                z-index: 1030;
+                border-top: 1px solid var(--border-color);
+                flex-shrink: 0; /* Importante: impede que a navegação inferior seja esmagada */
+            }
+
+            .app-bottom-nav .tab-button {
+                background: none;
+                border: none;
+                color: var(--icon-color);
+                font-size: 1.5rem; /* Tamanho dos ícones */
+                padding: 10px 15px; /* Área de toque maior */
+                transition:
+                    color 0.2s ease,
+                    transform 0.2s ease;
+            }
+            .app-bottom-nav .tab-button:hover {
+                color: var(--text-primary); /* Leve realce no hover */
+            }
+            .app-bottom-nav .tab-button.active {
+                color: var(--accent-primary); /* Cor de destaque para aba ativa/focada */
+                outline: none;
+            }
+
+            /* -------------------------------------------------------------------------- */
+            /*                           ELEMENTOS DE FORMULÁRIO                          */
+            /* -------------------------------------------------------------------------- */
+            /* Estes estilos customizam inputs, selects e botões para se alinharem ao tema. */
+            .form-label {
+                color: var(--text-secondary);
+                margin-bottom: 0.5rem;
+                font-size: 0.9em;
+            }
+
+            .form-control,
+            .form-select {
+                background-color: var(--bg-main) !important; /* !important para sobrescrever Bootstrap */
+                color: var(--text-primary) !important;
+                border: 1px solid var(--border-color) !important;
+                border-radius: var(--border-radius-base) !important;
+                font-size: 0.95em !important;
+                padding: 10px 12px !important;
+            }
+            .form-control::placeholder {
+                color: var(--text-secondary) !important;
+                opacity: 0.7;
+            }
+            .form-control:focus,
+            .form-select:focus {
+                outline: none !important;
+                border-color: var(--accent-primary) !important;
+                box-shadow: 0 0 0 3px var(--focus-ring-color) !important;
+            }
+            .form-select {
+                /* Estilização da seta do select */
+                -webkit-appearance: none;
+                -moz-appearance: none;
+                appearance: none;
+                background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%238b949e' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E") !important;
+                background-repeat: no-repeat !important;
+                background-position: right 12px center !important;
+                background-size: 16px !important;
+            }
+
+            /* Botão customizado (estilo "Prisma") */
+            .btn-theme {
+                /* Renomeado de btn-prisma para ser mais genérico ao template */
+                background-color: var(--button-bg);
+                color: var(--text-primary);
+                padding: 10px 18px;
+                border: 1px solid var(--button-border-color);
+                border-radius: var(--border-radius-base);
+                cursor: pointer;
+                font-size: 0.95em;
+                font-weight: 500;
+                transition:
+                    background-color 0.2s ease,
+                    border-color 0.2s ease,
+                    color 0.2s ease;
+                display: inline-flex; /* Para alinhar ícone e texto */
+                align-items: center;
+                justify-content: center;
+                text-decoration: none;
+            }
+            .btn-theme .feather {
+                margin-right: 8px;
+                width: 16px;
+                height: 16px;
+                color: currentColor; /* Herda a cor do texto do botão */
+            }
+            .btn-theme:hover:not(:disabled) {
+                background-color: var(--button-hover-bg);
+                border-color: var(--text-secondary); /* Borda mais clara no hover */
+                color: var(--text-primary);
+            }
+            .btn-theme:disabled {
+                background-color: var(--button-bg);
+                color: var(--text-secondary);
+                border-color: var(--border-color);
+                cursor: not-allowed;
+                opacity: 0.6;
+            }
+            /* Variação de botão primário/de ação */
+            .btn-theme.btn-theme-action {
+                background-color: var(--accent-action);
+                color: var(--text-on-accent);
+                border-color: var(--accent-action);
+            }
+            .btn-theme.btn-theme-action:hover:not(:disabled) {
+                background-color: var(--accent-action-hover);
+                border-color: var(--accent-action-hover);
+                color: #fff;
+            }
+
+            /* Ajustes para Input Group do Bootstrap com botão customizado */
+            .input-group .form-control {
+                border-top-right-radius: 0 !important;
+                border-bottom-right-radius: 0 !important;
+            }
+            .input-group .btn-theme {
+                border-top-left-radius: 0 !important;
+                border-bottom-left-radius: 0 !important;
+            }
+
+            /* -------------------------------------------------------------------------- */
+            /*                     CONTEÚDO ESPECÍFICO DA ABA "HOME"                      */
+            /* -------------------------------------------------------------------------- */
+            .home-welcome-message {
+                text-align: center;
+                padding: 40px 20px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                height: 100%; /* Tenta centralizar verticalmente se for o único conteúdo */
+            }
+            .home-welcome-message .feather-smile {
+                /* Ícone de boas-vindas */
+                width: 60px;
+                height: 60px;
+                color: var(--accent-primary);
+                margin-bottom: 25px;
+            }
+            .home-welcome-message h3 {
+                font-size: 1.8em;
+                font-weight: 600;
+                color: var(--text-primary);
+                margin-bottom: 15px;
+            }
+            .home-welcome-message p {
+                font-size: 1.1em;
+                color: var(--text-secondary);
+                max-width: 500px; /* Limita a largura do parágrafo */
+                margin: 0 auto;
+                line-height: 1.6;
+            }
+
+            .card {
+                background-color: var(--bg-elements);
+                border: 1px solid var(--border-color);
+                color: var(--text-primary);
+            }
+            .card img {
+                min-height: 200px;
+                border-bottom: 1px solid var(--border-color);
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Estrutura principal do aplicativo -->
+        <div class="app-container">
+            <!-- Barra de Navegação Superior -->
+            <nav class="app-navbar">
+                <a class="navbar-brand" href="#" aria-label="Página inicial do Aplicativo"> <i data-feather="box"></i>Nome do App </a>
+            </nav>
+
+            <!-- Wrapper para o conteúdo das abas -->
+            <div class="app-content-wrapper">
+                <div class="app-tabs-container">
+                    <!-- Cabeçalho das Abas (Visível em Desktop) -->
+                    <!-- Controlado por Bootstrap: d-none (escondido por padrão) d-md-flex (visível como flex em telas médias ou maiores) -->
+                    <div class="app-tabs-header d-none d-md-flex" role="tablist" aria-label="Navegação principal em abas (desktop)">
+                        <button class="tab-button waves-effect" data-tab-id="home" id="desktop-tab-btn-home" role="tab" aria-controls="panel-home" aria-selected="false"><i data-feather="home"></i> Home</button>
+                        <button class="tab-button waves-effect" data-tab-id="search" id="desktop-tab-btn-search" role="tab" aria-controls="panel-search" aria-selected="false"><i data-feather="search"></i> Buscar</button>
+                        <button class="tab-button waves-effect" data-tab-id="settings" id="desktop-tab-btn-settings" role="tab" aria-controls="panel-settings" aria-selected="false"><i data-feather="settings"></i> Configurações</button>
+                        <!-- Adicione mais botões de aba aqui conforme necessário -->
+                    </div>
+
+                    <!-- Área de Conteúdo das Abas (com scroll/swipe) -->
+                    <div class="app-tabs-content-area">
+                        <!-- Painel da Aba "Home" -->
+                        <div id="panel-home" class="tab-panel-content" role="tabpanel" aria-labelledby="desktop-tab-btn-home mobile-tab-btn-home">
+                            <div class="home-welcome-message">
+                                <i data-feather="smile"></i>
+                                <h3>Bem-vindo ao Template!</h3>
+                                <p>Esta é a aba "Home". Você pode customizar este conteúdo facilmente. Navegue pelas outras abas para ver mais exemplos.</p>
+                            </div>
+                        </div>
+
+                        <!-- Painel da Aba "Void" -->
+                        <div id="panel-void" class="tab-panel-content" role="tabpanel" aria-labelledby="desktop-tab-btn-void mobile-tab-btn-void">
+                            <div class="container-fluid d-grid gap-4">
+                                <div class="card">
+                                    <img src="https://cdnb.artstation.com/p/assets/images/images/059/971/953/original/ryan-haight-seward-park-large.gif?1677549171" class="card-img-top" alt="..." />
+                                    <div class="card-body">
+                                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card’s content.</p>
+                                    </div>
+                                </div>
+                                <div class="noxss-player-compact" id="myCustomPlayer">
+                                    <img src="" alt="Album Art" class="noxss-album-art" />
+                                    <div class="noxss-track-info">
+                                        <h3 class="noxss-title">Carregando...</h3>
+                                        <p class="noxss-artist"></p>
+                                    </div>
+                                    <div class="noxss-controls">
+                                        <button class="noxss-control-button noxss-prev-button waves-effect waves-light" aria-label="Anterior" disabled>
+                                            <i data-feather="skip-back"></i>
+                                        </button>
+                                        <button class="noxss-control-button noxss-play-pause waves-effect waves-light" aria-label="Play" disabled>
+                                            <!-- SVG do play/pause é inserido pelo JS -->
+                                        </button>
+                                        <button class="noxss-control-button noxss-next-button waves-effect waves-light" aria-label="Próximo" disabled>
+                                            <i data-feather="skip-forward"></i>
+                                        </button>
+                                    </div>
+                                    <!-- Áudio player escondido, essencial para o JS -->
+                                    <audio class="noxss-audio-player" style="display: none" crossorigin="anonymous"></audio>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Painel da Aba "Bible" -->
+                        <div id="panel-bible" class="tab-panel-content" role="tabpanel" aria-labelledby="desktop-tab-btn-bible mobile-tab-btn-bible">
+                            <div class="container-fluid">
+                                <h1 class="text-center mt-5 mb-1"><b>Tiago 3</b></h1>
+                                <p class="lead text-center">Dominar a limgua</p>
+                                <hr />
+                                <p><b>1</b> Meus irmãos, somente poucos de vocês deveriam se tornar mestres na Igreja, pois vocês sabem que nós, os que ensinamos, seremos julgados com mais rigor do que os outros.</p>
+
+                                <p><b>2</b> Todos nós sempre cometemos erros. Quem não comete nenhum erro no que diz é uma pessoa madura, capaz de controlar todo o seu corpo.</p>
+
+                                <p><b>3</b> Até na boca dos cavalos colocamos um freio para que nos obedeçam e assim fazemos com que vão aonde queremos.</p>
+
+                                <p><b>4</b>4 Pensem no navio: grande como é, empurrado por ventos fortes, ele é guiado por um pequeno leme e vai aonde o piloto quer.</p>
+
+                                <p><b>5</b>5 É isto o que acontece com a língua: mesmo pequena, ela se gaba de grandes coisas. Vejam como uma grande floresta pode ser incendiada por uma pequena chama!</p>
+
+                                <p><b>6</b>6 A língua é um fogo. Ela é um mundo de maldade, ocupa o seu lugar no nosso corpo e espalha o mal em todo o nosso ser. Com o fogo que vem do próprio inferno, ela põe toda a nossa vida em chamas.</p>
+
+                                <p><b>7</b>7 O ser humano é capaz de dominar todas as criaturas e tem dominado os animais selvagens, os pássaros, os animais que se arrastam pelo chão e os peixes.</p>
+
+                                <p><b>8</b>8 Mas ninguém ainda foi capaz de dominar a língua. Ela é má, cheia de veneno mortal, e ninguém a pode controlar.</p>
+
+                                <p><b>9</b>9 Usamos a língua tanto para agradecer ao Senhor e Pai como para amaldiçoar as pessoas, que foram criadas parecidas com Deus.</p>
+
+                                <p><b>10</b>10 Da mesma boca saem palavras tanto de agradecimento como de maldição. Meus irmãos, isso não deve ser assim.</p>
+
+                                <p><b>11</b>11 Por acaso pode a mesma fonte jorrar água doce e água amarga?</p>
+
+                                <p><b>12</b>12 Meus irmãos, por acaso pode uma figueira dar azeitonas ou um pé de uva dar figos? Assim, também, uma fonte de água salgada não pode dar água doce.</p>
+
+                                <p><b>13</b>13 Existe entre vocês alguém que seja sábio e inteligente? Pois então que prove isso pelo seu bom comportamento e pelas suas ações, praticadas com humildade e sabedoria.</p>
+
+                                <p><b>14</b>14 Mas, se no coração de vocês existe inveja, amargura e egoísmo, então não mintam contra a verdade, gabando-se de serem sábios.</p>
+
+                                <p><b>15</b>15 Essa espécie de sabedoria não vem do céu; ela é deste mundo, é da nossa natureza humana e é diabólica.</p>
+
+                                <p><b>16</b>16 Pois, onde há inveja e egoísmo, há também confusão e todo tipo de coisas más.</p>
+
+                                <p><b>17</b>17 A sabedoria que vem do céu é antes de tudo pura; e é também pacífica, bondosa e amigável. Ela é cheia de misericórdia, produz uma colheita de boas ações, não trata os outros pela sua aparência e é livre de fingimento.</p>
+
+                                <p><b>18</b>18 Pois a bondade é a colheita produzida pelas sementes que foram plantadas pelos que trabalham em favor da paz.</p>
+                            </div>
+                        </div>
+
+                        <!-- Painel da Aba "Buscar" -->
+                        <div id="panel-search" class="tab-panel-content" role="tabpanel" aria-labelledby="desktop-tab-btn-search mobile-tab-btn-search">
+                            <div class="container-fluid">
+                                <!-- Bootstrap container para padding e layout responsivo -->
+                                <h4><i data-feather="search"></i>Página de Busca</h4>
+                                <form id="search-form" class="mb-4" role="search">
+                                    <div class="input-group">
+                                        <input type="search" class="form-control" placeholder="O que você procura?" id="search-input" aria-label="Campo de busca" />
+                                        <button class="btn-theme waves-effect waves-light" type="submit"><i data-feather="arrow-right-circle"></i> Buscar</button>
+                                    </div>
+                                </form>
+                                <div id="search-results-area">
+                                    <p class="text-secondary">Use o campo acima para iniciar uma busca.</p>
+                                    <!-- Resultados da busca seriam inseridos aqui dinamicamente -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Painel da Aba "Configurações" -->
+                        <div id="panel-settings" class="tab-panel-content" role="tabpanel" aria-labelledby="desktop-tab-btn-settings mobile-tab-btn-settings">
+                            <div class="container-fluid">
+                                <h4><i data-feather="sliders"></i>Configurações</h4>
+                                <p class="text-secondary mb-4">Esta seção pode ser usada para configurações do usuário ou do aplicativo.</p>
+                                <div class="mb-3">
+                                    <label for="themeSelect" class="form-label">Preferência de Tema (Exemplo)</label>
+                                    <select class="form-select" id="themeSelect" aria-label="Seleção de tema">
+                                        <option selected>Tema Escuro (Padrão)</option>
+                                        <option disabled>Tema Claro (Em desenvolvimento)</option>
+                                    </select>
+                                </div>
+                                <button class="btn-theme btn-theme-action waves-effect waves-light mt-2"><i data-feather="save"></i> Salvar Alterações</button>
+                            </div>
+                        </div>
+                        <!-- Adicione mais painéis de conteúdo de aba aqui -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Barra de Navegação Inferior (Visível em Mobile) -->
+            <!-- Controlado por Bootstrap: d-flex (visível como flex por padrão) d-md-none (escondido em telas médias ou maiores) -->
+            <nav class="app-bottom-nav d-flex d-md-none" role="tablist" aria-label="Navegação principal (móvel)">
+                <button class="tab-button" data-tab-id="home" id="mobile-tab-btn-home" role="tab" aria-controls="panel-home" aria-selected="false" aria-label="Home">
+                    <i data-feather="home"></i>
+                </button>
+                <button class="tab-button" data-tab-id="void" id="mobile-tab-btn-void" role="tab" aria-controls="panel-void" aria-selected="false" aria-label="Buscar">
+                    <i data-feather="codesandbox"></i>
+                </button>
+                <button class="tab-button" data-tab-id="bible" id="mobile-tab-btn-bible" role="tab" aria-controls="panel-bible" aria-selected="false" aria-label="Buscar">
+                    <i data-feather="book"></i>
+                </button>
+                <button class="tab-button" data-tab-id="search" id="mobile-tab-btn-search" role="tab" aria-controls="panel-search" aria-selected="false" aria-label="Buscar">
+                    <i data-feather="search"></i>
+                </button>
+                <button class="tab-button" data-tab-id="settings" id="mobile-tab-btn-settings" role="tab" aria-controls="panel-settings" aria-selected="false" aria-label="Configurações">
+                    <i data-feather="settings"></i>
+                </button>
+                <!-- Adicione mais botões de aba aqui conforme necessário -->
+            </nav>
+        </div>
+
+        <!-- Scripts (Locais) -->
+        <!-- Bootstrap 5 JS Bundle (inclui Popper.js para tooltips, popovers, etc.) -->
+        <script src="packages/js/bootstrap.bundle.min.js"></script>
+        <!-- Waves.js para efeito ripple -->
+        <script src="packages/js/waves.min.js"></script>
+        <!-- Feather Icons para ícones SVG -->
+        <script src="packages/resources/feather-icons/dist/feather.js"></script>
+
+        <!-- Noxss.js componentes do app -->
+        <script src="packages/js/noxss.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jsmediatags/3.9.5/jsmediatags.min.js"></script>
+
+        <!-- Script Principal do Template -->
+        <script>
+            /**
+             * Script de Controle do Template de Abas
+             *
+             * Este script gerencia a navegação por abas, incluindo:
+             * - Troca de abas por clique ou swipe (scroll horizontal).
+             * - Atualização do estado ativo dos botões de aba.
+             * - Animação de entrada (fade-in) para o conteúdo das abas.
+             * - Inicialização de bibliotecas (Feather Icons, Waves.js).
+             */
+            document.addEventListener("DOMContentLoaded", function () {
+                // ---------------------------------------------------------------------- //
+                //                            CONSTANTES E SELETORES                      //
+                // ---------------------------------------------------------------------- //
+                const TAB_BUTTONS_SELECTOR = ".tab-button"; // Seletor para todos os botões de aba (desktop e mobile)
+                const TAB_PANELS_CONTAINER_SELECTOR = ".app-tabs-content-area"; // Container que "scrolla" os painéis
+                const TAB_PANEL_SELECTOR = ".tab-panel-content"; // Seletor para cada painel de conteúdo de aba
+                const DEFAULT_ACTIVE_TAB_ID = "home"; // ID da aba que deve ser ativa ao carregar a página
+                const ANIMATION_CLASSES_FADE_IN = ["animate__animated", "animate__fadeIn"]; // Classes do Animate.css
+
+                // ---------------------------------------------------------------------- //
+                //                           SELEÇÃO DE ELEMENTOS DO DOM                  //
+                // ---------------------------------------------------------------------- //
+                const allTabButtons = document.querySelectorAll(TAB_BUTTONS_SELECTOR);
+                const tabPanelsContainer = document.querySelector(TAB_PANELS_CONTAINER_SELECTOR);
+                const allTabPanels = document.querySelectorAll(TAB_PANEL_SELECTOR);
+
+                // Verificação básica para garantir que os elementos essenciais existem
+                if (!tabPanelsContainer || allTabPanels.length === 0 || allTabButtons.length === 0) {
+                    console.error("Template de Abas: Elementos essenciais (botões, container ou painéis) não foram encontrados. Verifique os seletores e a estrutura HTML.");
+                    return; // Interrompe a execução se elementos chave não estiverem presentes
+                }
+
+                // ---------------------------------------------------------------------- //
+                //                         FUNÇÕES AUXILIARES                             //
+                // ---------------------------------------------------------------------- //
+
+                /**
+                 * Atualiza o estado visual (classe 'active') e atributos ARIA dos botões de aba.
+                 * @param {string} activeTabId - O ID da aba (definido em `data-tab-id`) que deve ser marcada como ativa.
+                 */
+                function updateActiveTabVisuals(activeTabId) {
+                    allTabButtons.forEach(button => {
+                        const isButtonForActiveTab = button.getAttribute("data-tab-id") === activeTabId;
+                        button.classList.toggle("active", isButtonForActiveTab);
+                        button.setAttribute("aria-selected", isButtonForActiveTab.toString());
+                    });
+
+                    // Acessibilidade: Painéis não ativos podem ser marcados como 'aria-hidden="true"'
+                    // No entanto, como os painéis estão sempre no DOM (apenas fora da viewport ou com opacity 0),
+                    // o gerenciamento de 'aria-hidden' é opcional e depende da estratégia de visibilidade.
+                    // Por simplicidade, este template foca no 'aria-selected' dos botões.
+                }
+
+                /**
+                 * Navega para a aba especificada.
+                 * Isso envolve rolar o container de conteúdo e atualizar os indicadores visuais.
+                 * @param {string} tabIdToActivate - O ID da aba (ex: "home", "search") a ser ativada.
+                 */
+                function switchToTab(tabIdToActivate) {
+                    const targetPanelId = `panel-${tabIdToActivate}`; // Constrói o ID do painel de conteúdo (ex: "panel-home")
+
+                    // Encontra o índice do painel alvo para calcular a posição de scroll
+                    // Convertendo NodeList para Array para usar findIndex de forma segura
+                    const panelsArray = Array.from(allTabPanels);
+                    const targetPanelIndex = panelsArray.findIndex(panel => panel.id === targetPanelId);
+
+                    if (targetPanelIndex === -1) {
+                        console.warn(`Painel de conteúdo para a aba "${tabIdToActivate}" (ID: "${targetPanelId}") não encontrado.`);
+                        return;
+                    }
+
+                    // Calcula a posição de scroll e rola o container suavemente
+                    const scrollPosition = tabPanelsContainer.offsetWidth * targetPanelIndex;
+                    tabPanelsContainer.scrollTo({ left: scrollPosition, behavior: "smooth" });
+
+                    updateActiveTabVisuals(tabIdToActivate); // Atualiza botões e atributos ARIA
+                }
+
+                // ---------------------------------------------------------------------- //
+                //                  CONFIGURAÇÃO DE EVENTOS (EVENT BINDING)               //
+                // ---------------------------------------------------------------------- //
+
+                /**
+                 * Vincula todos os ouvintes de evento necessários para a funcionalidade das abas.
+                 */
+                function bindTabEvents() {
+                    // Evento de clique para todos os botões de aba
+                    allTabButtons.forEach(button => {
+                        button.addEventListener("click", function () {
+                            const tabId = this.getAttribute("data-tab-id");
+                            if (tabId) {
+                                switchToTab(tabId);
+                            }
+                        });
+                    });
+
+                    // Evento de scroll no container de conteúdo das abas
+                    // Atualiza a aba ativa visualmente quando o usuário faz scroll/swipe.
+                    let scrollDebounceTimeout;
+                    tabPanelsContainer.addEventListener("scroll", function () {
+                        // Usa debounce para evitar execuções excessivas da lógica de atualização durante o scroll
+                        clearTimeout(scrollDebounceTimeout);
+                        scrollDebounceTimeout = setTimeout(() => {
+                            // Calcula o índice do painel atualmente mais visível
+                            const currentIndex = Math.round(tabPanelsContainer.scrollLeft / tabPanelsContainer.offsetWidth);
+                            if (allTabPanels[currentIndex]) {
+                                // Extrai o ID base da aba do ID do painel (ex: "home" de "panel-home")
+                                const activeTabId = allTabPanels[currentIndex].id.replace("panel-", "");
+                                updateActiveTabVisuals(activeTabId);
+                            }
+                        }, 10); // Delay de 10ms para o debounce (ajuste conforme necessário)
+                    });
+
+                    // IntersectionObserver para animar painéis de aba quando entram na viewport
+                    // Adiciona um efeito de fade-in suave usando Animate.css.
+                    const panelObserverOptions = {
+                        root: tabPanelsContainer, // Observa intersecções dentro do container dos painéis
+                        rootMargin: "0px",
+                        threshold: 0.4 // Dispara quando 40% do painel estiver visível
+                    };
+
+                    const panelIntersectionCallback = (entries, observerInstance) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                entry.target.style.opacity = 1; // Garante visibilidade antes da animação
+                                entry.target.classList.add(...ANIMATION_CLASSES_FADE_IN);
+                                // Opcional: Desconectar o observer após a primeira animação para performance
+                                // observerInstance.unobserve(entry.target);
+                            } else {
+                                // Opcional: Remover classes se o painel sair da viewport para re-animar
+                                // entry.target.classList.remove(...ANIMATION_CLASSES_FADE_IN);
+                                // entry.target.style.opacity = 0; // Resetar opacidade se for re-animar
+                            }
+                        });
+                    };
+                    const panelObserver = new IntersectionObserver(panelIntersectionCallback, panelObserverOptions);
+                    allTabPanels.forEach(panel => panelObserver.observe(panel));
+                }
+
+                // ---------------------------------------------------------------------- //
+                //                         INICIALIZAÇÃO DO TEMPLATE                      //
+                // ---------------------------------------------------------------------- //
+
+                /**
+                 * Inicializa todas as funcionalidades do template de abas.
+                 */
+                function initializeTabTemplate() {
+                    // Inicializa Feather Icons
+                    if (typeof feather !== "undefined") {
+                        feather.replace(); // Substitui tags <i data-feather="..."> por SVGs
+                    } else {
+                        console.warn("Feather Icons não foi carregado. Verifique o link da CDN ou o caminho do script.");
+                    }
+
+                    // Inicializa Waves.js (efeito ripple)
+                    if (typeof Waves !== "undefined") {
+                        Waves.init();
+                        // Aplica o efeito a todos os elementos com a classe '.waves-effect'
+                        Waves.attach(".waves-effect", ["waves-light"]); // 'waves-light' é bom para temas escuros
+                    } else {
+                        console.warn("Waves.js não foi carregado. Verifique o link da CDN ou o caminho do script.");
+                    }
+
+                    bindTabEvents(); // Configura os ouvintes de evento para as abas
+
+                    // Ativa a aba padrão ao carregar a página
+                    // Um pequeno delay pode ajudar a garantir que o layout esteja estável,
+                    // especialmente para cálculos de `offsetWidth` e para que o IntersectionObserver não dispare prematuramente.
+                    setTimeout(() => {
+                        switchToTab(DEFAULT_ACTIVE_TAB_ID);
+                    }, 100); // 100ms de delay (ajuste ou remova se não causar problemas)
+                }
+
+                const myPlaylist = ["resources/default.mp3", "resources/girasol.mp3", "resources/heart-to-heart.mp3", "resources/sorry-jay-z.mp3"];
+
+                if (window.Noxss) {
+                    window.Noxss.setPlaylist("myCustomPlayer", myPlaylist, true); // true = tocar imediatamente
+                }
+
+                // Inicia o template
+                initializeTabTemplate();
+            });
+        </script>
+    </body>
+</html>
+/ Resetar opacidade se for re-animar
+                            }
+                        });
+                    };
+                    const panelObserver = new IntersectionObserver(panelIntersectionCallback, panelObserverOptions);
+                    allTabPanels.forEach(panel => panelObserver.observe(panel));
+                }
+
+                // ---------------------------------------------------------------------- //
+                //                         INICIALIZAÇÃO DO TEMPLATE                      //
+                // ---------------------------------------------------------------------- //
+
+                /**
+                 * Inicializa todas as funcionalidades do template de abas.
+                 */
+                function initializeTabTemplate() {
+                    // Inicializa Feather Icons
+                    if (typeof feather !== "undefined") {
+                        feather.replace(); // Substitui tags <i data-feather="..."> por SVGs
+                    } else {
+                        console.warn("Feather Icons não foi carregado. Verifique o link da CDN ou o caminho do script.");
+                    }
+
+                    // Inicializa Waves.js (efeito ripple)
+                    if (typeof Waves !== "undefined") {
+                        Waves.init();
+                        // Aplica o efeito a todos os elementos com a classe '.waves-effect'
+                        Waves.attach(".waves-effect", ["waves-light"]); // 'waves-light' é bom para temas escuros
+                    } else {
+                        console.warn("Waves.js não foi carregado. Verifique o link da CDN ou o caminho do script.");
+                    }
+
+                    bindTabEvents(); // Configura os ouvintes de evento para as abas
+
+                    // Ativa a aba padrão ao carregar a página
+                    // Um pequeno delay pode ajudar a garantir que o layout esteja estável,
+                    // especialmente para cálculos de `offsetWidth` e para que o IntersectionObserver não dispare prematuramente.
+                    setTimeout(() => {
+                        switchToTab(DEFAULT_ACTIVE_TAB_ID);
+                    }, 100); // 100ms de delay (ajuste ou remova se não causar problemas)
+                }
+
+                const myPlaylist = ["resources/girasol.mp3", "resources/default.mp3", "resources/heart-to-heart.mp3", "resources/sorry-jay-z.mp3"];
+
+                if (window.Noxss) {
+                    window.Noxss.setPlaylist("myCustomPlayer", myPlaylist, true); // true = tocar imediatamente
+                }
+
+                // Inicia o template
+                initializeTabTemplate();
+            });
+
+            // SCRIPT DA BIIBLIA
+
+            import { loadJson } from "./js/utils.js";
+
+            // Define os caminhos para os arquivos JSON de dados da Bíblia.
+            const versesPath = "resources/biblia/versions/NTLH/verses.json";
+            const storiesPath = "resources/biblia/versions/NTLH/stories.json";
+            const booksPath = "resources/biblia/books.json";
+
+            /**
+             * Busca o nome de um livro e gera o cabeçalho HTML para um capítulo específico.
+             * @param {number} bookID - O número de identificação do livro.
+             * @param {number} chapter - O número do capítulo.
+             * @returns {Promise<string>} Uma string contendo o HTML do cabeçalho.
+             */
+            async function getBook(bookID, chapter) {
+                const books = await loadJson(booksPath);
+                const book = books.find(b => b.book_number === bookID);
+
+                const headerHtml = `<h1 class="text-center mt-5 mb-1"><b>${book.name.toUpperCase()} ${chapter}</b></h1>\n\n<hr />\n\n`;
+
+                return headerHtml;
+            }
+
+            /**
+             * Busca e filtra as histórias (títulos de seções) para um capítulo específico.
+             * @param {number} bookID - O número de identificação do livro.
+             * @param {number} chapter - O número do capítulo.
+             * @returns {Promise<Array<object>>} Um array de objetos, onde cada objeto é uma história.
+             */
+            async function getStories(bookID, chapter) {
+                let stories = await loadJson(storiesPath);
+
+                // Filtra as histórias para o livro e capítulo corretos,
+                // e remove títulos que contêm "<x>", que podem ser referências cruzadas ou notas.
+                const filteredStories = stories.filter(story => story.book_number === bookID && story.chapter === chapter && !story.title.includes("<x>"));
+
+                return filteredStories;
+            }
+
+            /**
+             * Busca e filtra todos os versículos de um capítulo específico.
+             * Esta função é responsável apenas por obter os dados brutos dos versículos.
+             * @param {number} bookID - O número de identificação do livro.
+             * @param {number} chapter - O número do capítulo.
+             * @returns {Promise<Array<object>>} Um array de objetos, onde cada objeto é um versículo.
+             */
+            async function getChapterVerses(bookID, chapter) {
+                const verses = await loadJson(versesPath);
+
+                // Filtra para obter apenas os versículos do livro e capítulo desejados,
+                // e remove quaisquer versículos que tenham o campo de texto vazio.
+                const filteredVerses = verses.filter(verse => verse.book_number === bookID && verse.chapter === chapter && verse.text !== "");
+
+                console.log(filteredVerses);
+
+                return filteredVerses;
+            }
+
+            /**
+             * Processa os arrays de versículos e histórias para gerar o conteúdo HTML do capítulo.
+             * @param {Array<object>} verses - O array de objetos de versículos.
+             * @param {Array<object>} stories - O array de objetos de histórias (títulos).
+             * @returns {string} Uma string contendo o HTML do corpo do capítulo.
+             */
+            function processChapterHtml(verses, stories) {
+                let chapterHtml = "";
+
+                for (let i = 0; i < verses.length; i++) {
+                    let verseNumberHtml = "";
+
+                    // Encontra se existe uma história (título) para o versículo atual.
+                    const matchingStory = stories.find(story => story.verse === verses[i].verse);
+
+                    // Adiciona o número do versículo se ele já não estiver presente no texto (marcado com "<n>").
+                    if (!verses[i].text.includes("<n>")) {
+                        verseNumberHtml = `<n>${verses[i].verse}</n> `;
+                    }
+
+                    let storyHtml = "";
+                    // Se uma história foi encontrada, formata-a como um parágrafo de destaque.
+                    if (matchingStory) {
+                        storyHtml = `<p class="lead">${matchingStory.title}</p>\n\n`;
+                    }
+
+                    // Monta a string HTML para o versículo atual, incluindo a história (se houver).
+                    chapterHtml += storyHtml + `<p class="verse">${verseNumberHtml}${verses[i].text}</p>\n\n`;
+                }
+
+                return chapterHtml;
+            }
+
+            /**
+             * Função controladora que orquestra a busca e a renderização de um capítulo.
+             * @param {string} input - Uma string no formato "bookID chapter" (ex: "660 3").
+             */
+            async function displayChapter(input) {
+                const inputArray = input.split(" ");
+                const bookID = Number(inputArray[0]);
+                const chapter = Number(inputArray[1]);
+
+                // 1. Obter todos os dados necessários de forma assíncrona.
+                const versesData = await getChapterVerses(bookID, chapter);
+                const storiesData = await getStories(bookID, chapter);
+                const headerContent = await getBook(bookID, chapter);
+
+                // 2. Processar os dados para gerar o HTML do corpo do capítulo.
+                const chapterContent = processChapterHtml(versesData, storiesData);
+
+                // 3. Renderizar o conteúdo no DOM.
+                const bibleContainer = document.getElementById("biblia");
+                bibleContainer.innerHTML = headerContent + chapterContent;
+                console.log(bibleContainer.innerHTML);
+            }
+
+            /**
+             * Ponto de entrada principal. Executado quando o DOM está totalmente carregado.
+             * Carrega e exibe um capítulo padrão ao iniciar a página.
+             */
+            document.addEventListener("DOMContentLoaded", async () => {
+                console.log("DOM completamente carregado e parseado. Iniciando carregamento dos dados JSON.");
+
+                try {
+                    const defaultBookID = 660;
+                    const defaultChapter = 3;
+
+                    // Etapa 1: Obter todos os dados necessários em paralelo para otimização.
+                    const [versesData, storiesData, headerContent] = await Promise.all([getChapterVerses(defaultBookID, defaultChapter), getStories(defaultBookID, defaultChapter), getBook(defaultBookID, defaultChapter)]);
+
+                    // Etapa 2: Processar os dados obtidos para gerar o HTML do corpo do capítulo.
+                    const chapterContent = processChapterHtml(versesData, storiesData);
+
+                    // Etapa 3: Encontrar o elemento no DOM e renderizar o conteúdo.
+                    const bibleContainer = document.getElementById("biblia");
+                    if (bibleContainer) {
+                        bibleContainer.innerHTML = headerContent + chapterContent;
+                        console.log(bibleContainer.innerHTML);
+                        console.log("Conteúdo da Bíblia adicionado ao DOM.");
+                    } else {
+                        console.error('Elemento com ID "biblia" não encontrado.');
+                    }
+                } catch (error) {
+                    // Bloco para tratamento de erros durante a carga inicial.
+                    console.error("Ocorreu um erro durante o carregamento ou exibição dos dados:", error);
+                    const bibleContainer = document.getElementById("biblia");
+                    if (bibleContainer) {
+                        bibleContainer.innerHTML = "<p style='color: red;'>Ocorreu um erro ao carregar o conteúdo.</p>";
+                    }
+                }
+            });
+        </script>
+    </body>
+</html>

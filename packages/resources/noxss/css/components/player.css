@@ -1,0 +1,98 @@
+/* ==========================================================================
+   Noxss Library: Compact Player Component
+   - Estilos para a classe .noxss-player-compact
+   ========================================================================== */
+
+.noxss-player-compact {
+    font-family: var(--noxss-font-family-base);
+    background-color: var(--noxss-bg-elements);
+    color: var(--noxss-text-primary);
+    border-radius: var(--noxss-border-radius-base);
+    padding: 12px;
+    box-shadow: var(--noxss-shadow-md);
+    border: 1px solid var(--noxss-border-color);
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    overflow: hidden;
+}
+
+.noxss-player-compact .noxss-album-art {
+    border-radius: var(--noxss-border-radius-base);
+    object-fit: cover;
+    background-color: var(--noxss-bg-surface);
+    width: 50px;
+    height: 50px;
+    flex-shrink: 0;
+}
+
+.noxss-player-compact .noxss-track-info {
+    flex-grow: 1;
+    min-width: 0;
+}
+
+.noxss-player-compact .noxss-title {
+    font-size: 1em;
+    font-weight: 600;
+    color: var(--noxss-text-primary);
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.noxss-player-compact .noxss-artist {
+    font-size: 0.85em;
+    color: var(--noxss-text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.noxss-player-compact .noxss-controls {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex-shrink: 0;
+}
+
+.noxss-player-compact .noxss-control-button {
+    background: transparent;
+    border: none;
+    color: var(--noxss-text-secondary);
+    padding: 8px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: color 0.2s ease, background-color 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+}
+
+.noxss-player-compact .noxss-control-button svg {
+    width: 20px;
+    height: 20px;
+    stroke: currentColor;
+}
+
+.noxss-player-compact .noxss-play-pause svg {
+    width: 24px;
+    height: 24px;
+}
+
+.noxss-player-compact .noxss-control-button:hover:not(:disabled) {
+    color: var(--noxss-accent-primary);
+}
+
+.noxss-player-compact .noxss-control-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.noxss-player-compact .noxss-play-pause.active {
+    color: var(--noxss-accent-primary);
+}

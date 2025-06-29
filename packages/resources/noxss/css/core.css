@@ -1,0 +1,77 @@
+/* ==========================================================================
+   Noxss Library: Core
+   - Define o Design System central através de variáveis CSS.
+   - Inclui um reset básico e estilos para o <body>.
+   - Versão: 1.0.0
+   ========================================================================== */
+
+:root {
+    /* ---------------------------------- */
+    /* Paleta de Cores (Base: FinanCerto) */
+    /* ---------------------------------- */
+    /* Fundo */
+    --noxss-bg-main: #181818;
+    --noxss-bg-surface: #202020;
+    --noxss-bg-elements: #262626;
+
+    /* Texto */
+    --noxss-text-primary: #c9d1d9;
+    --noxss-text-secondary: #8b949e;
+    --noxss-text-on-accent: #ffffff;
+
+    /* Bordas */
+    --noxss-border-color: #383838;
+
+    /* Destaque (Accent) */
+    --noxss-accent-primary: #4caf50; /* Verde FinanCerto */
+    --noxss-accent-primary-hover: #66bb6a;
+    --noxss-accent-primary-rgb: 76, 175, 80;
+
+    /* Cores Semânticas */
+    --noxss-color-success: #28a745;
+    --noxss-color-danger: #dc3545;
+    --noxss-color-warning: #ffc107;
+    --noxss-color-danger-hover: #c82333;
+
+    /* ---------------------------------- */
+    /* Tipografia                         */
+    /* ---------------------------------- */
+    --noxss-font-family-base: "Linotte-SemiBold", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --noxss-font-family-monospace: "Fira Code", "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    --noxss-line-height-base: 1.6;
+
+    /* ---------------------------------- */
+    /* Espaçamento e Bordas               */
+    /* ---------------------------------- */
+    --noxss-border-radius-base: 8px;
+    --noxss-border-radius-sm: 4px;
+    --noxss-border-radius-lg: 12px;
+
+    /* ---------------------------------- */
+    /* Outros                             */
+    /* ---------------------------------- */
+    --noxss-focus-ring-color: rgba(var(--noxss-accent-primary-rgb), 0.25);
+    --noxss-shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.15);
+    --noxss-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.2);
+    --noxss-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+/* ---------------------------------- */
+/* Reset e Estilos Base               */
+/* ---------------------------------- */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: var(--noxss-font-family-base);
+    line-height: var(--noxss-line-height-base);
+    color: var(--noxss-text-primary);
+    background-color: var(--noxss-bg-main);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}

@@ -1,0 +1,248 @@
+<!doctype html>
+<html lang="pt-br">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Noxss Library - Botões</title>
+
+        <!-- 1. Carregue o CSS base da sua biblioteca (contém as variáveis globais) -->
+        <!-- <link rel="stylesheet" href="path/to/noxss.css" /> -->
+
+        <!-- 2. Carregue o novo módulo de botões -->
+        <link rel="stylesheet" href="https://raw.githubusercontent.com/suntzar/kiozu/refs/heads/main/css/style.css" />
+
+        <!-- Dependência para Ícones (Feather Icons) -->
+        <script defer src="https://unpkg.com/feather-icons"></script>
+    </head>
+    <body>
+        <div id="grid_0">
+            <div class="bot-message">
+                <p style="color: var(--color-f)">
+                    <span style="color: var(--color-p)">Olá! <i class="fas fa-hand-paper" style="animation: acenar 2s ease infinite; color: var(--color-p)" aria-hidden="true"></i></span><br />Sou o <span style="color: var(--color-p)">Kiozu</span>, como posso te ajudar hoje?
+                </p>
+                <style>
+                    @keyframes acenar {
+                        0% {
+                            transform: rotate(0deg);
+                        }
+                        25% {
+                            transform: rotate(25deg);
+                        }
+                        50% {
+                            transform: rotate(0deg);
+                        }
+                        75% {
+                            transform: rotate(-25deg);
+                        }
+                        100% {
+                            transform: rotate(0deg);
+                        }
+                    }
+                </style>
+            </div>
+        </div>
+
+        <div id="grid_1" style="transition: 1s">
+            <div class="user-message">
+                <p>Mude a cor do chat para amarelo</p>
+            </div>
+        </div>
+
+        <div id="grid_2" style="transition: 1s">
+            <div class="bot-message">
+                <style>
+                    /* Mudando as cores principais para amarelo */
+                    :root {
+                        --color-p: #ffdb99; /* Amarelo claro */
+                        --color-s: #ffb266; /* Laranja (um amarelo mais escuro/quente para secundário) */
+                    }
+                </style>
+                <p style="color: var(--color-f)">
+                    <span style="color: var(--color-p)">
+                        <i class="fas fa-palette" style="animation: bounce 1s infinite alternate" aria-hidden="true"></i>
+                    </span>
+                    Feito! O ambiente agora está mais ensolarado! ✨
+                </p>
+                <p style="color: var(--color-f)">Espero que goste do novo tom de amarelo. Como posso alegrar mais o seu dia? 😊</p>
+                <style>
+                    @keyframes bounce {
+                        0% {
+                            transform: translateY(0);
+                        }
+                        100% {
+                            transform: translateY(-5px);
+                        }
+                    }
+                </style>
+            </div>
+        </div>
+
+        <div id="grid_3" style="transition: 1s">
+            <div class="user-message">
+                <p>Agora eu quero que você faça um mockup de um app que gerencie um cronograma no estilo 24/7, onde terá definidas atividades rotineiras durante as 24 horas do dia num período de uma semana, coisas como dormir, comer, tomar banho, correr, estudar, ir para faculdade, trabalhar e etc.</p>
+            </div>
+        </div>
+
+        <div id="grid_4" style="transition: 1s">
+            <div class="bot-message">
+                <p style="color: var(--color-f)">
+                    <span style="color: var(--color-p)">
+                        <i class="fas fa-mobile-alt" style="animation: pulse-kiozu 1.5s infinite alternate" aria-hidden="true"></i>
+                    </span>
+                    Que ótima ideia! Vamos criar um mockup para o seu aplicativo de cronograma 24/7. 🤩
+                </p>
+                <p style="color: var(--color-f)">Prepare-se para visualizar uma organização incrível das suas atividades!</p>
+
+                <div class="app-mockup-kiozu" style="background-color: var(--color-z); border-radius: 15px; padding: 20px; margin: 20px auto; max-width: 900px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); overflow: hidden; position: relative">
+                    <div class="app-header-kiozu" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--color-s)">
+                        <h2 style="color: var(--color-p); font-size: 1.5em; margin: 0">
+                            <i class="fas fa-calendar-alt" style="margin-right: 10px" aria-hidden="true"></i>
+                            Meu Cronograma 24/7
+                        </h2>
+                        <span style="color: var(--color-f); font-size: 1.1em">
+                            <i class="fas fa-ellipsis-v" aria-hidden="true"></i>
+                        </span>
+                    </div>
+
+                    <div class="week-nav-kiozu" style="display: flex; justify-content: space-around; margin-bottom: 20px; background-color: var(--color-d); padding: 10px; border-radius: 10px">
+                        <span style="color: var(--color-p); font-weight: bold">SEG</span>
+                        <span style="color: var(--color-f)">TER</span>
+                        <span style="color: var(--color-f)">QUA</span>
+                        <span style="color: var(--color-f)">QUI</span>
+                        <span style="color: var(--color-f)">SEX</span>
+                        <span style="color: var(--color-f)">SAB</span>
+                        <span style="color: var(--color-f)">DOM</span>
+                    </div>
+
+                    <div class="schedule-grid-kiozu" style="display: grid; grid-template-columns: 60px repeat(7, 1fr); /* Horas + 7 dias */ gap: 5px; max-height: 400px; /* Limita a altura e permite rolagem para simular o app */ overflow-y: auto; padding-right: 5px; /* Espaço para a barra de rolagem */">
+                        <!-- Top Row (Day Headers) -->
+                        <div id="grid-corner-kiozu" style="background-color: transparent; border-radius: 5px"></div>
+                        <!-- Empty corner -->
+                        <div id="day-header-seg-kiozu" style="color: var(--color-p); font-weight: bold; text-align: center; padding: 5px; background-color: var(--color-d); border-radius: 5px">SEG</div>
+                        <div id="day-header-ter-kiozu" style="color: var(--color-f); font-weight: bold; text-align: center; padding: 5px; background-color: var(--color-d); border-radius: 5px">TER</div>
+                        <div id="day-header-qua-kiozu" style="color: var(--color-f); font-weight: bold; text-align: center; padding: 5px; background-color: var(--color-d); border-radius: 5px">QUA</div>
+                        <div id="day-header-qui-kiozu" style="color: var(--color-f); font-weight: bold; text-align: center; padding: 5px; background-color: var(--color-d); border-radius: 5px">QUI</div>
+                        <div id="day-header-sex-kiozu" style="color: var(--color-f); font-weight: bold; text-align: center; padding: 5px; background-color: var(--color-d); border-radius: 5px">SEX</div>
+                        <div id="day-header-sab-kiozu" style="color: var(--color-f); font-weight: bold; text-align: center; padding: 5px; background-color: var(--color-d); border-radius: 5px">SAB</div>
+                        <div id="day-header-dom-kiozu" style="color: var(--color-f); font-weight: bold; text-align: center; padding: 5px; background-color: var(--color-d); border-radius: 5px">DOM</div>
+
+                        <!-- Schedule Rows (Hours and Activities) -->
+                        <!-- Hour 00:00 -->
+                        <div id="hour-00-kiozu" class="hour-label-kiozu" style="color: var(--color-f); text-align: right; padding: 5px; border-radius: 5px; background-color: var(--color-d)">00:00</div>
+                        <div id="act-00-0-kiozu" class="activity-slot-kiozu" style="background-color: #4f4d5b; color: var(--color-f); padding: 5px; border-radius: 5px; font-size: 0.8em; display: flex; align-items: center"><i class="fas fa-moon" style="margin-right: 5px; color: var(--color-s)" aria-hidden="true"></i> Dormir</div>
+                        <div id="act-00-1-kiozu" class="activity-slot-kiozu" style="background-color: #4f4d5b; color: var(--color-f); padding: 5px; border-radius: 5px; font-size: 0.8em; display: flex; align-items: center"><i class="fas fa-moon" style="margin-right: 5px; color: var(--color-s)" aria-hidden="true"></i> Dormir</div>
+                        <div id="act-00-2-kiozu" class="activity-slot-kiozu" style="background-color: #4f4d5b; color: var(--color-f); padding: 5px; border-radius: 5px; font-size: 0.8em; display: flex; align-items: center"><i class="fas fa-moon" style="margin-right: 5px; color: var(--color-s)" aria-hidden="true"></i> Dormir</div>
+                        <div id="act-00-3-kiozu" class="activity-slot-kiozu" style="background-color: #4f4d5b; color: var(--color-f); padding: 5px; border-radius: 5px; font-size: 0.8em; display: flex; align-items: center"><i class="fas fa-moon" style="margin-right: 5px; color: var(--color-s)" aria-hidden="true"></i> Dormir</div>
+                        <div id="act-00-4-kiozu" class="activity-slot-kiozu" style="background-color: #4f4d5b; color: var(--color-f); padding: 5px; border-radius: 5px; font-size: 0.8em; display: flex; align-items: center"><i class="fas fa-moon" style="margin-right: 5px; color: var(--color-s)" aria-hidden="true"></i> Dormir</div>
+                        <div id="act-00-5-kiozu" class="activity-slot-kiozu" style="background-color: #4f4d5b; color: var(--color-f); padding: 5px; border-radius: 5px; font-size: 0.8em; display: flex; align-items: center"><i class="fas fa-moon" style="margin-right: 5px; color: var(--color-s)" aria-hidden="true"></i> Dormir</div>
+                        <div id="act-00-6-kiozu" class="activity-slot-kiozu" style="background-color: #4f4d5b; color: var(--color-f); padding: 5px; border-radius: 5px; font-size: 0.8em; display: flex; align-items: center"><i class="fas fa-moon" style="margin-right: 5px; color: var(--color-s)" aria-hidden="true"></i> Dormir</div>
+
+                        <!-- Hour 07:00 -->
+                        <div id="hour-07-kiozu" class="hour-label-kiozu" style="color: var(--color-f); text-align: right; padding: 5px; border-radius: 5px; background-color: var(--color-d)">07:00</div>
+                        <div id="act-07-0-kiozu" class="activity-slot-kiozu" style="background-color: var(--color-s); color: var(--color-z); padding: 5px; border-radius: 5px; font-size: 0.8em; display: flex; align-items: center"><i class="fas fa-running" style="margin-right: 5px" aria-hidden="true"></i> Correr</div>
+                        <div id="act-07-1-kiozu" class="activity-slot-kiozu" style="background-color: var(--color-s); color: var(--color-z); padding: 5px; border-radius: 5px; font-size: 0.8em; display: flex; align-items: center"><i class="fas fa-shower" style="margin-right: 5px" aria-hidden="true"></i> Banho</div>
+                        <div id="act-07-2-kiozu" class="activity-slot-kiozu" style="background-color: var(--color-s); color: var(--color-z); padding: 5px; border-radius: 5px; font-size: 0.8em; display: flex; align-items: center"><i class="fas fa-running" style="margin-right: 5px" aria-hidden="true"></i> Correr</div>
+                        <div id="act-07-3-kiozu" class="activity-slot-kiozu" style="background-color: var(--color-s); color: var(--color-z); padding: 5px; border-radius: 5px; font-size: 0.8em; display: flex; align-items: center"><i class="fas fa-shower" style="margin-right: 5px" aria-hidden="true"></i> Banho</div>
+                        <div id="act-07-4-kiozu" class="activity-slot-kiozu" style="background-color: var(--color-s); color: var(--color-z); padding: 5px; border-radius: 5px; font-size: 0.8em; display: flex; align-items: center"><i class="fas fa-running" style="margin-right: 5px" aria-hidden="true"></i> Correr</div>
+                        <div id="act-07-5-kiozu" class="activity-slot-kiozu" style="background-color: #6a687a; color: var(--color-f); padding: 5px; border-radius: 5px; font-size: 0.8em; display: flex; align-items: center"><i class="fas fa-bed" style="margin-right: 5px; color: var(--color-p)" aria-hidden="true"></i> Acordar</div>
+                        <div id="act-07-6-kiozu" class="activity-slot-kiozu" style="background-color: #6a687a; color: var(--color-f); padding: 5px; border-radius: 5px; font-size: 0.8em; display: flex; align-items: center"><i class="fas fa-bed" style="margin-right: 5px; color: var(--color-p)" aria-hidden="true"></i> Acordar</div>
+
+                        <!-- Hour 08:00 -->
+                        <div id="hour-08-kiozu" class="hour-label-kiozu" style="color: var(--color-f); text-align: right; padding: 5px; border-radius: 5px; background-color: var(--color-d)">08:00</div>
+                        <div id="act-08-0-kiozu" class="activity-slot-kiozu" style="background-color: var(--color-p); color: var(--color-z); padding: 5px; border-radius: 5px; font-size: 0.8em; display: flex; align-items: center"><i class="fas fa-briefcase" style="margin-right: 5px" aria-hidden="true"></i> Trabalho</div>
+                        <div id="act-08-1-kiozu" class="activity-slot-kiozu" style="background-color: var(--color-p); color: var(--color-z); padding: 5px; border-radius: 5px; font-size: 0.8em; display: flex; align-items: center"><i class="fas fa-briefcase" style="margin-right: 5px" aria-hidden="true"></i> Trabalho</div>
+                        <div id="act-08-2-kiozu" class="activity-slot-kiozu" style="background-color: var(--color-p); color: var(--color-z); padding: 5px; border-radius: 5px; font-size: 0.8em; display: flex; align-items: center"><i class="fas fa-briefcase" style="margin-right: 5px" aria-hidden="true"></i> Trabalho</div>
+                        <div id="act-08-3-kiozu" class="activity-slot-kiozu" style="background-color: var(--color-p); color: var(--color-z); padding: 5px; border-radius: 5px; font-size: 0.8em; display: flex; align-items: center"><i class="fas fa-briefcase" style="margin-right: 5px" aria-hidden="true"></i> Trabalho</div>
+                        <div id="act-08-4-kiozu" class="activity-slot-kiozu" style="background-color: var(--color-p); color: var(--color-z); padding: 5px; border-radius: 5px; font-size: 0.8em; display: flex; align-items: center"><i class="fas fa-briefcase" style="margin-right: 5px" aria-hidden="true"></i> Trabalho</div>
+                        <div id="act-08-5-kiozu" class="activity-slot-kiozu" style="background-color: #6a687a; color: var(--color-f); padding: 5px; border-radius: 5px; font-size: 0.8em; display: flex; align-items: center"><i class="fas fa-coffee" style="margin-right: 5px; color: var(--color-p)" aria-hidden="true"></i> Café</div>
+                        <div id="act-08-6-kiozu" class="activity-slot-kiozu" style="background-color: #6a687a; color: var(--color-f); padding: 5px; border-radius: 5px; font-size: 0.8em; display: flex; align-items: center"><i class="fas fa-coffee" style="margin-right: 5px; color: var(--color-p)" aria-hidden="true"></i> Café</div>
+
+                        <!-- Hour 09:00 -->
+                        <div id="hour-09-kiozu" class="hour-label-kiozu" style="color: var(--color-f); text-align: right; padding: 5px; border-radius: 5px; background-color: var(--color-d)">09:00</div>
+                        <div id="act-09-0-kiozu" class="activity-slot-kiozu" style="background-color: var(--color-p); color: var(--color-z); padding: 5px; border-radius: 5px; font-size: 0.8em; display: flex; align-items: center"><i class="fas fa-briefcase" style="margin-right: 5px" aria-hidden="true"></i> Trabalho</div>
+                        <div id="act-09-1-kiozu" class="activity-slot-kiozu" style="background-color: var(--color-p); color: var(--color-z); padding: 5px; border-radius: 5px; font-size: 0.8em; display: flex; align-items: center"><i class="fas fa-briefcase" style="margin-right: 5px" aria-hidden="true"></i> Trabalho</div>
+                        <div id="act-09-2-kiozu" class="activity-slot-kiozu" style="background-color: var(--color-p); color: var(--color-z); padding: 5px; border-radius: 5px; font-size: 0.8em; display: flex; align-items: center"><i class="fas fa-briefcase" style="margin-right: 5px" aria-hidden="true"></i> Trabalho</div>
+                        <div id="act-09-3-kiozu" class="activity-slot-kiozu" style="background-color: var(--color-p); color: var(--color-z); padding: 5px; border-radius: 5px; font-size: 0.8em; display: flex; align-items: center"><i class="fas fa-briefcase" style="margin-right: 5px" aria-hidden="true"></i> Trabalho</div>
+                        <div id="act-09-4-kiozu" class="activity-slot-kiozu" style="background-color: var(--color-p); color: var(--color-z); padding: 5px; border-radius: 5px; font-size: 0.8em; display: flex; align-items: center"><i class="fas fa-briefcase" style="margin-right: 5px" aria-hidden="true"></i> Trabalho</div>
+                        <div id="act-09-5-kiozu" class="activity-slot-kiozu" style="background-color: #b0ffb0; color: var(--color-z); padding: 5px; border-radius: 5px; font-size: 0.8em; display: flex; align-items: center"><i class="fas fa-book-reader" style="margin-right: 5px" aria-hidden="true"></i> Estudar</div>
+                        <div id="act-09-6-kiozu" class="activity-slot-kiozu" style="background-color: #b0ffb0; color: var(--color-z); padding: 5px; border-radius: 5px; font-size: 0.8em; display: flex; align-items: center"><i class="fas fa-book-reader" style="margin-right: 5px" aria-hidden="true"></i> Estudar</div>
+
+                        <!-- Hour 12:00 (Lunch) -->
+                        <div id="hour-12-kiozu" class="hour-label-kiozu" style="color: var(--color-f); text-align: right; padding: 5px; border-radius: 5px; background-color: var(--color-d)">12:00</div>
+                        <div id="act-12-0-kiozu" class="activity-slot-kiozu" style="background-color: #b0d8ff; color: var(--color-z); padding: 5px; border-radius: 5px; font-size: 0.8em; display: flex; align-items: center"><i class="fas fa-utensils" style="margin-right: 5px" aria-hidden="true"></i> Almoço</div>
+                        <div id="act-12-1-kiozu" class="activity-slot-kiozu" style="background-color: #b0d8ff; color: var(--color-z); padding: 5px; border-radius: 5px; font-size: 0.8em; display: flex; align-items: center"><i class="fas fa-utensils" style="margin-right: 5px" aria-hidden="true"></i> Almoço</div>
+                        <div id="act-12-2-kiozu" class="activity-slot-kiozu" style="background-color: #b0d8ff; color: var(--color-z); padding: 5px; border-radius: 5px; font-size: 0.8em; display: flex; align-items: center"><i class="fas fa-utensils" style="margin-right: 5px" aria-hidden="true"></i> Almoço</div>
+                        <div id="act-12-3-kiozu" class="activity-slot-kiozu" style="background-color: #b0d8ff; color: var(--color-z); padding: 5px; border-radius: 5px; font-size: 0.8em; display: flex; align-items: center"><i class="fas fa-utensils" style="margin-right: 5px" aria-hidden="true"></i> Almoço</div>
+                        <div id="act-12-4-kiozu" class="activity-slot-kiozu" style="background-color: #b0d8ff; color: var(--color-z); padding: 5px; border-radius: 5px; font-size: 0.8em; display: flex; align-items: center"><i class="fas fa-utensils" style="margin-right: 5px" aria-hidden="true"></i> Almoço</div>
+                        <div id="act-12-5-kiozu" class="activity-slot-kiozu" style="background-color: #b0d8ff; color: var(--color-z); padding: 5px; border-radius: 5px; font-size: 0.8em; display: flex; align-items: center"><i class="fas fa-utensils" style="margin-right: 5px" aria-hidden="true"></i> Almoço</div>
+                        <div id="act-12-6-kiozu" class="activity-slot-kiozu" style="background-color: #b0d8ff; color: var(--color-z); padding: 5px; border-radius: 5px; font-size: 0.8em; display: flex; align-items: center"><i class="fas fa-utensils" style="margin-right: 5px" aria-hidden="true"></i> Almoço</div>
+
+                        <!-- Hour 18:00 (Example for evening activities) -->
+                        <div id="hour-18-kiozu" class="hour-label-kiozu" style="color: var(--color-f); text-align: right; padding: 5px; border-radius: 5px; background-color: var(--color-d)">18:00</div>
+                        <div id="act-18-0-kiozu" class="activity-slot-kiozu" style="background-color: #c8b0ff; color: var(--color-z); padding: 5px; border-radius: 5px; font-size: 0.8em; display: flex; align-items: center"><i class="fas fa-graduation-cap" style="margin-right: 5px" aria-hidden="true"></i> Facul.</div>
+                        <div id="act-18-1-kiozu" class="activity-slot-kiozu" style="background-color: #c8b0ff; color: var(--color-z); padding: 5px; border-radius: 5px; font-size: 0.8em; display: flex; align-items: center"><i class="fas fa-graduation-cap" style="margin-right: 5px" aria-hidden="true"></i> Facul.</div>
+                        <div id="act-18-2-kiozu" class="activity-slot-kiozu" style="background-color: #c8b0ff; color: var(--color-z); padding: 5px; border-radius: 5px; font-size: 0.8em; display: flex; align-items: center"><i class="fas fa-graduation-cap" style="margin-right: 5px" aria-hidden="true"></i> Facul.</div>
+                        <div id="act-18-3-kiozu" class="activity-slot-kiozu" style="background-color: #ff6666; color: var(--color-z); padding: 5px; border-radius: 5px; font-size: 0.8em; display: flex; align-items: center"><i class="fas fa-dumbbell" style="margin-right: 5px" aria-hidden="true"></i> Treino</div>
+                        <div id="act-18-4-kiozu" class="activity-slot-kiozu" style="background-color: #c8b0ff; color: var(--color-z); padding: 5px; border-radius: 5px; font-size: 0.8em; display: flex; align-items: center"><i class="fas fa-graduation-cap" style="margin-right: 5px" aria-hidden="true"></i> Facul.</div>
+                        <div id="act-18-5-kiozu" class="activity-slot-kiozu" style="background-color: #b0ffb0; color: var(--color-z); padding: 5px; border-radius: 5px; font-size: 0.8em; display: flex; align-items: center"><i class="fas fa-book-reader" style="margin-right: 5px" aria-hidden="true"></i> Estudar</div>
+                        <div id="act-18-6-kiozu" class="activity-slot-kiozu" style="background-color: #b0ffb0; color: var(--color-z); padding: 5px; border-radius: 5px; font-size: 0.8em; display: flex; align-items: center"><i class="fas fa-book-reader" style="margin-right: 5px" aria-hidden="true"></i> Estudar</div>
+
+                        <!-- Hour 22:00 -->
+                        <div id="hour-22-kiozu" class="hour-label-kiozu" style="color: var(--color-f); text-align: right; padding: 5px; border-radius: 5px; background-color: var(--color-d)">22:00</div>
+                        <div id="act-22-0-kiozu" class="activity-slot-kiozu" style="background-color: #4f4d5b; color: var(--color-f); padding: 5px; border-radius: 5px; font-size: 0.8em; display: flex; align-items: center"><i class="fas fa-bed" style="margin-right: 5px; color: var(--color-s)" aria-hidden="true"></i> Relaxar</div>
+                        <div id="act-22-1-kiozu" class="activity-slot-kiozu" style="background-color: #4f4d5b; color: var(--color-f); padding: 5px; border-radius: 5px; font-size: 0.8em; display: flex; align-items: center"><i class="fas fa-bed" style="margin-right: 5px; color: var(--color-s)" aria-hidden="true"></i> Relaxar</div>
+                        <div id="act-22-2-kiozu" class="activity-slot-kiozu" style="background-color: #4f4d5b; color: var(--color-f); padding: 5px; border-radius: 5px; font-size: 0.8em; display: flex; align-items: center"><i class="fas fa-bed" style="margin-right: 5px; color: var(--color-s)" aria-hidden="true"></i> Relaxar</div>
+                        <div id="act-22-3-kiozu" class="activity-slot-kiozu" style="background-color: #4f4d5b; color: var(--color-f); padding: 5px; border-radius: 5px; font-size: 0.8em; display: flex; align-items: center"><i class="fas fa-bed" style="margin-right: 5px; color: var(--color-s)" aria-hidden="true"></i> Relaxar</div>
+                        <div id="act-22-4-kiozu" class="activity-slot-kiozu" style="background-color: #4f4d5b; color: var(--color-f); padding: 5px; border-radius: 5px; font-size: 0.8em; display: flex; align-items: center"><i class="fas fa-bed" style="margin-right: 5px; color: var(--color-s)" aria-hidden="true"></i> Relaxar</div>
+                        <div id="act-22-5-kiozu" class="activity-slot-kiozu" style="background-color: #4f4d5b; color: var(--color-f); padding: 5px; border-radius: 5px; font-size: 0.8em; display: flex; align-items: center"><i class="fas fa-bed" style="margin-right: 5px; color: var(--color-s)" aria-hidden="true"></i> Dormir</div>
+                        <div id="act-22-6-kiozu" class="activity-slot-kiozu" style="background-color: #4f4d5b; color: var(--color-f); padding: 5px; border-radius: 5px; font-size: 0.8em; display: flex; align-items: center"><i class="fas fa-bed" style="margin-right: 5px; color: var(--color-s)" aria-hidden="true"></i> Dormir</div>
+
+                        <!-- Scroll indication placeholder for the full 24 hours -->
+                        <div id="scroll-indicator-kiozu" style="grid-column: 1 / span 8; text-align: center; color: var(--color-s); padding: 10px; font-size: 0.9em"><i class="fas fa-arrow-down" aria-hidden="true"></i> Role para ver o cronograma completo das 24 horas <i class="fas fa-arrow-down" aria-hidden="true"></i></div>
+                    </div>
+                </div>
+
+                <p style="color: var(--color-f)">
+                    <br />
+                    Este é um rascunho inicial do seu aplicativo! 🎨
+                </p>
+                <p style="color: var(--color-f)">Ele mostra as horas no lado esquerdo e os dias da semana na parte superior. As caixas coloridas representam as atividades rotineiras. Por padrão, a cor <b>amarelo</b> (Primária) representa o trabalho, a cor <b>azul</b> representa as refeições, e a cor <b>roxa</b> representa o estudo ou faculdade. As outras atividades e fins de semana possuem cores diversas para ilustrar a flexibilidade.</p>
+                <p style="color: var(--color-f)">O que achou? Gostaria de adicionar mais detalhes ou personalizar algo? 😄</p>
+                <style>
+                    /* Estilo para a barra de rolagem personalizada */
+                    .schedule-grid-kiozu::-webkit-scrollbar {
+                        width: 8px;
+                    }
+                    .schedule-grid-kiozu::-webkit-scrollbar-track {
+                        background: var(--color-d);
+                        border-radius: 10px;
+                    }
+                    .schedule-grid-kiozu::-webkit-scrollbar-thumb {
+                        background: var(--color-s);
+                        border-radius: 10px;
+                    }
+                    .schedule-grid-kiozu::-webkit-scrollbar-thumb:hover {
+                        background: var(--color-p);
+                    }
+                    /* Animação para o ícone do celular */
+                    @keyframes pulse-kiozu {
+                        0% {
+                            transform: scale(1);
+                        }
+                        50% {
+                            transform: scale(1.05);
+                        }
+                        100% {
+                            transform: scale(1);
+                        }
+                    }
+                </style>
+            </div>
+        </div>
+
+        <script>
+            // Inicializa Feather Icons
+            document.addEventListener("DOMContentLoaded", () => feather.replace());
+        </script>
+    </body>
+</html>

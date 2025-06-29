@@ -1,0 +1,54 @@
+/* ==========================================================================
+   Noxss Library: FAB (Floating Action Button) Component
+   - Versão: 2.0 (Com posicionamento dinâmico via JS)
+   - Depende de: core.css
+   ========================================================================== */
+
+/*
+ * Define variáveis para o tamanho e margem do FAB.
+ * A altura da área de segurança inferior é definida dinamicamente pelo JS.
+ */
+:root {
+    --noxss-fab-size: 56px;
+    --noxss-fab-margin: 1.25rem; /* 20px */
+    
+    /* 
+     * Variável de "área segura". 
+     * Por padrão é 0. O JS irá atualizá-la se encontrar uma navbar inferior.
+     */
+    --noxss-safe-area-inset-bottom: 0px; 
+}
+
+.noxss-fab {
+    /* Posicionamento */
+    position: fixed;
+    z-index: 1040;
+    right: var(--noxss-fab-margin);
+    
+    /* 
+     * A MÁGICA: Usa calc() para somar a margem padrão com a altura da
+     * área segura definida pelo JS. Se a área segura for 0, ele simplesmente
+     * usa a margem. Se for > 0, ele se afasta da parte inferior.
+     */
+    bottom: calc(var(--noxss-safe-area-inset-bottom) + var(--noxss-fab-margin));
+
+    /* Dimensões e Aparência (sem alterações) */
+    width: var(--noxss-fab-size);
+    height: var(--noxss-fab-size);
+    background-color: var(--noxss-accent-primary);
+    color: var(--noxss-text-on-accent);
+    border: none;
+    border-radius: 35%;
+    box-shadow: var(--noxss-shadow-lg);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* O resto do arquivo (ícone, transições, :hover, .is-hidden) permanece o mesmo */
+.noxss-fab .noxss-icon { width: calc(var(--noxss-fab-size) * 0.5); height: calc(var(--noxss-fab-size) * 0.5); stroke-width: 2.5; }
+.noxss-fab { transition: transform 250ms cubic-bezier(0.4, 0, 0.2, 1), background-color 200ms ease, box-shadow 200ms ease, opacity 250ms ease; }
+.noxss-fab:hover { background-color: var(--noxss-accent-primary-hover); transform: scale(1.05) translateY(-2px); box-shadow: 0 0 20px rgba(var(--noxss-accent-primary-rgb), 0.3); }
+.noxss-fab:active { transform: scale(0.98); box-shadow: var(--noxss-shadow-md); }
+.noxss-fab.is-hidden { opacity: 0; transform: scale(0.5); pointer-events: none; }

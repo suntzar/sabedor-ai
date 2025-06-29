@@ -1,0 +1,98 @@
+/* ==========================================================================
+   Noxss Library: Buttons Component
+   - Estilos para a classe base .noxss-btn e seus modificadores.
+   ========================================================================== */
+
+.noxss-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
+    padding: 0.6em 1.2em;
+    font-family: var(--noxss-font-family-base);
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-align: center;
+    vertical-align: middle;
+    text-decoration: none;
+    white-space: nowrap;
+    user-select: none;
+    border: 1px solid transparent;
+    border-radius: var(--noxss-border-radius-base);
+    cursor: pointer;
+    transition: all 150ms ease-in-out;
+}
+.noxss-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: var(--noxss-shadow-md);
+}
+.noxss-btn:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: var(--noxss-shadow-sm);
+}
+.noxss-btn:focus-visible {
+    outline: 2px solid var(--noxss-focus-ring-color);
+    outline-offset: 2px;
+}
+.noxss-btn:disabled, .noxss-btn.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+}
+.noxss-btn .feather, .noxss-btn svg {
+    width: 1.1em;
+    height: 1.1em;
+    stroke-width: 2.5;
+}
+
+/* -- Modificador: Primário (Ação principal) -- */
+.noxss-btn--primary {
+    background-color: var(--noxss-accent-primary);
+    border-color: var(--noxss-accent-primary);
+    color: var(--noxss-text-on-accent);
+}
+.noxss-btn--primary:hover:not(:disabled) {
+    background-color: var(--noxss-accent-primary-hover);
+    border-color: var(--noxss-accent-primary-hover);
+}
+
+/* -- Modificador: Ghost (Ação secundária) -- */
+.noxss-btn--ghost {
+    background-color: transparent;
+    border-color: var(--noxss-border-color);
+    color: var(--noxss-text-secondary);
+}
+.noxss-btn--ghost:hover:not(:disabled) {
+    border-color: var(--noxss-accent-primary);
+    color: var(--noxss-text-primary);
+    background-color: rgba(var(--noxss-accent-primary-rgb), 0.1);
+}
+
+/* -- Modificador: Perigo (Ação destrutiva) -- */
+.noxss-btn--danger {
+    background-color: var(--noxss-color-danger);
+    border-color: var(--noxss-color-danger);
+    color: var(--noxss-text-on-accent);
+}
+.noxss-btn--danger:hover:not(:disabled) {
+    background-color: var(--noxss-color-danger-hover);
+    border-color: var(--noxss-color-danger-hover);
+}
+
+/* -- Modificador: Ícone (Botão circular, apenas ícone) -- */
+.noxss-btn--icon {
+    padding: 0;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    color: var(--noxss-text-secondary);
+}
+.noxss-btn--icon:hover:not(:disabled) {
+    background-color: var(--noxss-bg-surface);
+    color: var(--noxss-text-primary);
+}
+.noxss-btn--icon.active {
+    color: var(--noxss-accent-primary);
+    background-color: rgba(var(--noxss-accent-primary-rgb), 0.1);
+}

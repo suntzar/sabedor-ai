@@ -1,0 +1,286 @@
+/* packages/css/noxss-typography.css */
+
+/* -------------------------------------------------------------------------- */
+/*                      NOXSS TYPOGRAPHY: ESTILOS BASE                        */
+/* -------------------------------------------------------------------------- */
+/* Utiliza variáveis definidas no CSS principal do app ou Noxss.css */
+
+body {
+    /* Garante que as variáveis de Noxss sejam a base se este arquivo for usado de forma mais isolada,
+       mas no contexto do app, as variáveis :root do app principal prevalecerão. */
+    font-family: var(--noxss-font-family-base, system-ui, sans-serif);
+    line-height: 1.6;
+    color: var(--noxss-text-primary, #c9d1d9);
+    background-color: var(--noxss-bg-main, #181818);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                 CABEÇALHOS                                 */
+/* -------------------------------------------------------------------------- */
+h1, .h1, h2, .h2, h3, .h3, h4, .h4, h5, .h5, h6, .h6 {
+    margin-top: 0;
+    margin-bottom: 0.75em; /* Espaçamento mais consistente */
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--noxss-text-primary, #e6edf3); /* Um pouco mais claro para destaque, ou manter o padrão */
+}
+
+h1, .h1 {
+    font-size: 2.4rem;
+    letter-spacing: -0.02em;
+}
+
+h2, .h2 {
+    font-size: 2rem;
+    letter-spacing: -0.015em;
+    /* border-bottom: 1px solid var(--noxss-border-color, #383838); */
+    /* padding-bottom: 0.3em; */
+}
+
+h3, .h3 {
+    font-size: 1.7rem;
+    font-weight: 500;
+}
+
+h4, .h4 {
+    font-size: 1.4rem;
+    font-weight: 500;
+}
+
+h5, .h5 {
+    font-size: 1.15rem;
+    font-weight: 500;
+    color: var(--noxss-text-secondary, #8b949e); /* Mais sutil para H5 */
+}
+
+h6, .h6 {
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--noxss-text-secondary, #8b949e);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                 PARÁGRAFOS                                 */
+/* -------------------------------------------------------------------------- */
+p {
+    margin-top: 0;
+    margin-bottom: 1.25em;
+}
+
+.lead {
+    font-size: 1.2em;
+    font-weight: 400;
+    color: var(--noxss-text-secondary, #a0a8b1); /* Levemente mais claro que o secundário padrão */
+    margin-bottom: 1.5em;
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                    LINKS                                   */
+/* -------------------------------------------------------------------------- */
+a {
+    color: var(--noxss-accent-primary, #58a6ff);
+    text-decoration: none; /* Design mais limpo, hover indica clicabilidade */
+    transition: color 0.2s ease-in-out, text-decoration-color 0.2s ease-in-out;
+}
+
+a:hover {
+    color: var(--noxss-accent-primary-hover, #79c0ff); /* Um tom mais claro do accent */
+    text-decoration: underline;
+    text-decoration-color: var(--noxss-accent-primary-rgb, rgba(88, 166, 255, 0.5));
+}
+
+a:focus-visible {
+    outline: 2px solid var(--noxss-accent-primary, #58a6ff);
+    outline-offset: 2px;
+    border-radius: var(--noxss-border-radius-base, 4px);
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                   LISTAS                                   */
+/* -------------------------------------------------------------------------- */
+ul, ol {
+    margin-top: 0;
+    margin-bottom: 1.25em;
+    padding-left: 1.8em; /* Indentação um pouco maior */
+}
+
+ul li, ol li {
+    margin-bottom: 0.5em;
+}
+
+ul ul, ol ol, ul ol, ol ul {
+    margin-bottom: 0; /* Remove margem extra para listas aninhadas */
+}
+
+dt {
+    font-weight: 600;
+    color: var(--noxss-text-primary, #c9d1d9);
+}
+
+dd {
+    margin-bottom: 0.75em;
+    margin-left: 0; /* Bootstrap remove, mas para tipografia pura, pode ser 0 ou indentado */
+    color: var(--noxss-text-secondary, #8b949e);
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                BLOCKQUOTES                                 */
+/* -------------------------------------------------------------------------- */
+blockquote {
+    margin: 0 0 1.5em;
+    padding: 1em 1.5em;
+    border-left: 4px solid var(--noxss-accent-primary, #58a6ff);
+    background-color: var(--noxss-bg-surface, #202020); /* Fundo sutilmente diferente */
+    border-radius: 0 var(--noxss-border-radius-base, 6px) var(--noxss-border-radius-base, 6px) 0;
+    font-size: 1.05em;
+    color: var(--noxss-text-secondary, #b0bac5); /* Cor do texto um pouco mais clara que a secundária padrão */
+}
+
+blockquote p:last-child {
+    margin-bottom: 0;
+}
+
+blockquote footer,
+blockquote cite {
+    display: block;
+    font-size: 0.9em;
+    color: var(--noxss-text-secondary, #8b949e);
+    margin-top: 0.75em;
+}
+
+blockquote cite::before {
+    content: "— ";
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                   CÓDIGO                                   */
+/* -------------------------------------------------------------------------- */
+code, kbd, samp, pre {
+    font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    font-size: 0.9em;
+    direction: ltr; /* Garante a direção correta para o código */
+    unicode-bidi: bidi-override; /* Garante a direção correta para o código */
+}
+
+code {
+    color: var(--noxss-accent-code, #ff7b72); /* Cor de destaque para código, pode ser uma variável nova */
+    background-color: var(--noxss-bg-code-inline, rgba(var(--noxss-accent-primary-rgb, 88, 166, 255), 0.1));
+    padding: 0.2em 0.4em;
+    border-radius: var(--noxss-border-radius-base, 6px);
+    word-wrap: break-word;
+}
+
+a > code { /* Para links que contêm código */
+    color: inherit; /* Herda a cor do link */
+}
+
+pre {
+    display: block;
+    margin-top: 0;
+    margin-bottom: 1.25em;
+    padding: 1em;
+    font-size: 0.875em;
+    line-height: 1.5;
+    color: var(--noxss-text-primary, #c9d1d9);
+    background-color: var(--noxss-bg-main, #181818); /* Mesmo fundo da página para imersão */
+    border: 1px solid var(--noxss-border-color, #383838);
+    border-radius: var(--noxss-border-radius-base, 6px);
+    overflow: auto; /* Scroll para blocos de código longos */
+    -webkit-overflow-scrolling: touch;
+}
+
+pre code {
+    padding: 0;
+    font-size: inherit;
+    color: inherit;
+    background-color: transparent;
+    border-radius: 0;
+}
+
+kbd {
+    padding: 0.2em 0.45em;
+    color: var(--noxss-text-primary, #c9d1d9);
+    background-color: var(--noxss-bg-elements, #262626);
+    border: 1px solid var(--noxss-border-color, #383838);
+    border-bottom-width: 2px;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+    font-weight: 600;
+}
+
+/* -------------------------------------------------------------------------- */
+/*                            LINHA HORIZONTAL (HR)                           */
+/* -------------------------------------------------------------------------- */
+hr {
+    margin: 2em 0;
+    border: 0;
+    border-top: 1px solid var(--noxss-border-color, #383838);
+    opacity: 0.5; /* Para tornar um pouco mais sutil */
+}
+
+/* -------------------------------------------------------------------------- */
+/*                             OUTROS ELEMENTOS TEXTUAIS                      */
+/* -------------------------------------------------------------------------- */
+mark, .mark {
+    padding: 0.15em 0.3em;
+    background-color: var(--noxss-mark-bg, #ffd035); /* Um amarelo para destaque, ajustar se necessário */
+    color: var(--noxss-mark-text, #181818); /* Texto escuro sobre fundo claro */
+    border-radius: 3px;
+}
+
+small, .small {
+    font-size: 0.85em;
+    color: var(--noxss-text-secondary, #8b949e);
+}
+
+strong, b {
+    font-weight: 600;
+    color: var(--noxss-accent-primary, #58a6ff); /* Pode ser uma cor ligeiramente mais forte */
+}
+
+em, i {
+    font-style: italic;
+}
+
+abbr[title] {
+    text-decoration: underline dotted;
+    text-decoration-color: var(--noxss-accent-primary, #58a6ff);
+    cursor: help;
+}
+
+sub, sup {
+    position: relative;
+    font-size: 0.75em;
+    line-height: 0;
+    vertical-align: baseline;
+}
+sub { bottom: -0.25em; }
+sup { top: -0.5em; }
+
+/* -------------------------------------------------------------------------- */
+/*                             UTILITÁRIOS (opcional)                         */
+/* -------------------------------------------------------------------------- */
+.text-muted {
+    color: var(--noxss-text-secondary, #8b949e) !important;
+}
+
+.text-accent {
+    color: var(--noxss-accent-primary, #58a6ff) !important;
+}
+
+/* Estilos para ícones dentro de cabeçalhos, se desejar */
+h1 .feather, h2 .feather, h3 .feather, h4 .feather {
+    width: 1em; /* Relativo ao tamanho da fonte do cabeçalho */
+    height: 1em;
+    margin-right: 0.3em;
+    vertical-align: -0.1em; /* Ajuste fino do alinhamento vertical */
+    color: var(--noxss-icon-color, var(--noxss-text-secondary));
+}
+
+h1 .feather, h2 .feather { /* Ícones maiores em H1/H2 podem usar accent */
+    color: var(--noxss-accent-primary, #58a6ff);
+}

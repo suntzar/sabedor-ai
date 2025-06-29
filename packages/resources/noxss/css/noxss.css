@@ -1,0 +1,16 @@
+/* ==========================================================================
+   Noxss Library: Master Stylesheet
+   - Importa o core e todos os componentes em uma única folha de estilos.
+   - Versão: 1.0.0
+   ========================================================================== */
+
+/* 1. Core (Variáveis e Reset) */
+@import url('core.css');
+
+/* 2. Componentes */
+@import url('components/typography.css');
+@import url('components/buttons.css');
+@import url('components/player.css');
+/* @import url('components/tabs.css');     <-- Adicione quando criar */
+/* @import url('components/forms.css');    <-- Adicione quando criar */
+/* @import url('components/cards.css');    <-- Adicione quando criar */

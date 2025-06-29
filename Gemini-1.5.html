@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="pt-br">
+    <!-- Tema Dark por padrão, ideal para a interface de chat -->
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Chat com Gemini & Noxss</title>
+
+        <!-- 1. DEPENDÊNCIAS DA NOXSS E DO CHAT -->
+
+        <!-- Highlight.js (para blocos de código em markdown) -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+
+        <!-- Marked.js (para renderizar respostas do bot) -->
+        <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+        <!-- Feather Icons (para ícones na interface) -->
+        <script defer src="https://unpkg.com/feather-icons"></script>
+
+        <!-- VENDORS -->
+        <link rel="stylesheet" href="packages/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="packages/css/animate.min.css" />
+        <link rel="stylesheet" href="packages/css/waves.min.css" />
+
+        <!-- KaTeX CSS -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css" integrity="sha384-5TcZemv2l/9On385z///+d7MSYlvIEw9FuZTIdZ14vJLqWphw7e7ZPuOiCHJcFCP" crossorigin="anonymous" />
+
+        <!-- 2. BIBLIOTECA NOXSS -->
+
+        <!-- CSS Principal da Noxss -->
+        <link rel="stylesheet" href="noxss/dist/noxss.css" />
+
+        <!-- 3. ESTILOS CUSTOMIZADOS PARA O CHAT -->
+        <style>
+            :root {
+                --noxss-bg-main: #262626;
+                --noxss-bg-surface: #2a2a2a;
+                --noxss-bg-elements: #2e2e2e;
+                --noxss-accent-primary: rgb(129, 158, 175);
+                --noxss-accent-primary-hover: rgb(164, 194, 211);
+                --noxss-accent-primary-rgb: 129, 158, 175;
+                --noxss-font-family-base: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            }
+            #chat-container {
+                display: flex;
+                flex-direction: column;
+                gap: 1.5rem;
+                padding: 1rem;
+                overflow-y: auto;
+                height: 100%;
+            }
+            .chat-input-area {
+                padding: 0.75rem 1rem;
+                background-color: var(--noxss-bg-surface);
+                border-top: 1px solid var(--noxss-border-color);
+            }
+            #chat-form {
+                display: flex;
+                gap: 0.75rem;
+                align-items: stretch;
+                margin-bottom: 0;
+            }
+            #chat-form button {
+                margin: 2px;
+            }
+            #message-input::-webkit-resizer {
+                display: none;
+            }
+
+            .message-bubble {
+                padding: 0.75rem 1.25rem;
+                border-radius: var(--noxss-border-radius-base);
+                max-width: 100%;
+                width: fit-content;
+                overflow-x: auto;
+            }
+            .chat-message {
+                display: flex;
+                flex-direction: column;
+            }
+            .chat-message--user {
+                align-items: flex-end;
+            }
+            .chat-message--user .message-bubble {
+                background-color: var(--noxss-accent-primary);
+                color: #fff;
+
+                /* borda interna usual */
+                border: 1px solid var(--noxss-accent-primary-hover);
+
+                /* borda externa translúcida */
+                outline: 2px solid rgba(var(--noxss-accent-primary-rgb), 0.25);
+
+                /* alinha a outline logo fora da border */
+                outline-offset: 1px;
+            }
+            .chat-message--bot {
+                align-items: flex-start;
+            }
+            .chat-message--bot .message-bubble {
+                background-color: var(--noxss-bg-surface);
+                border: 1px solid var(--noxss-border-color);
+            }
+            .message-bubble p {
+                margin: 0;
+            }
+            .message-bubble p:not(:last-child) {
+                margin-bottom: 1rem;
+            }
+            .message-bubble .noxss-code-block {
+                margin-top: 1rem;
+                margin-bottom: 0.5rem;
+            }
+            .typing-indicator {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
+            }
+            .typing-indicator .noxss-spinner {
+                transform: scale(0.6);
+            }
+            .navbar-actions {
+                display: flex;
+                gap: 0.5rem;
+                margin-left: auto;
+            }
+        </style>
+    </head>
+    <body data-noxss-layout="app">
+        <div class="noxss-layout">
+            <!-- Barra de Navegação Superior -->
+            <nav class="noxss-navbar">
+                <a class="noxss-navbar__brand" href="#">
+                    <i data-feather="message-square" class="noxss-icon"></i>
+                    <span>V-Oito</span>
+                </a>
+                <p class="noxss-text-secondary" style="font-size: 0.8rem; margin-left: 5px; opacity: 0.7">Powered by Noxss</p>
+                <div class="navbar-actions">
+                    <button id="download-history-btn" class="noxss-btn noxss-btn--secondary" title="Baixar Histórico do Chat">
+                        <i data-feather="download" class="noxss-icon"></i>
+                    </button>
+                    <button id="upload-history-btn" class="noxss-btn noxss-btn--secondary" title="Carregar Histórico do Chat">
+                        <i data-feather="upload" class="noxss-icon"></i>
+                    </button>
+                    <input type="file" id="history-file-input" accept=".json" style="display: none" />
+                </div>
+            </nav>
+
+            <main class="noxss-layout__content" id="chat-container"></main>
+
+            <footer class="chat-input-area">
+                <form id="chat-form" class="noxss-form-group">
+                    <textarea type="text" id="message-input" class="noxss-input" placeholder="Pergunte algo ao Gemini..." autocomplete="off" rows="1" required></textarea>
+                    <button id="sendButton" type="submit" class="noxss-btn noxss-btn--primary" aria-label="Enviar mensagem">
+                        <i data-feather="send" class="noxss-icon"></i>
+                    </button>
+                </form>
+            </footer>
+        </div>
+
+        <!-- SCRIPTS -->
+        <script src="noxss/js/core.js"></script>
+        <script src="noxss/js/components/tabs.js"></script>
+        <script src="noxss/js/components/fab.js"></script>
+        <script src="noxss/js/components/modals.js"></script>
+        <script src="noxss/js/components/toasts.js"></script>
+        <script src="noxss/js/components/player.js"></script>
+        <script src="noxss/js/components/typography.js"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js" integrity="sha384-cMkvdD8LoxVzGF/RPUKAcvmm49FQ0oxwDF3BGKtDXcEc+T1b2N+teh/OJfpU0jr6" crossorigin="anonymous"></script>
+        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js" integrity="sha384-hCXGrW6PitJEwbkoStFjeJxv+fSOOQKOPbJxSfM6G5sWZjAyWhXiTIIAmQqnlLlh" crossorigin="anonymous" onload="renderMathInElement(document.body);"></script>
+
+        <script type="module">
+            import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from "https://esm.run/@google/generative-ai";
+
+            const API_KEY = "AIzaSyCxSyn1mq_zKZ5k7wLjBXfK_Gx361kZX1s";
+            const MODEL_NAME = "gemini-2.5-flash";
+
+            const chatContainer = document.getElementById("chat-container");
+            const chatForm = document.getElementById("chat-form");
+            const messageInput = document.getElementById("message-input");
+            //const sendButton = chatForm.querySelector("button");
+            const sendButton = document.getElementById("sendButton");
+            const downloadBtn = document.getElementById("download-history-btn");
+            const uploadBtn = document.getElementById("upload-history-btn");
+            const fileInput = document.getElementById("history-file-input");
+
+            let chat;
+            let model;
+            let systemInstruction;
+
+            function updateDynamicContent() {
+                if (window.feather) {
+                    feather.replace({ class: "noxss-icon" });
+                }
+                if (window.renderMathInElement) {
+                    renderMathInElement(document.body, {
+                        delimiters: [
+                            { left: "$$", right: "$$", display: true },
+                            { left: "$", right: "$", display: false }
+                        ],
+                        throwOnError: false
+                    });
+                }
+            }
+
+            function addMessage(text, sender) {
+                const messageWrapper = document.createElement("div");
+                messageWrapper.className = `chat-message chat-message--${sender}`;
+                const messageBubble = document.createElement("div");
+                messageBubble.className = "message-bubble";
+                if (sender === "user") {
+                    messageBubble.innerText = text;
+                } else {
+                    messageBubble.innerHTML = text;
+                }
+                messageWrapper.appendChild(messageBubble);
+                chatContainer.appendChild(messageWrapper);
+                messageWrapper.scrollIntoView({ behavior: "smooth", block: "end" });
+                return messageBubble;
+            }
+
+            function processBotResponse(bubbleElement, markdownText) {
+                bubbleElement.innerHTML = marked.parse(markdownText);
+                bubbleElement.querySelectorAll("pre code").forEach(block => {
+                    const pre = block.parentElement;
+                    if (!pre.parentElement.classList.contains("noxss-code-block")) {
+                        const wrapper = document.createElement("div");
+                        wrapper.className = "noxss-code-block";
+                        pre.parentNode.insertBefore(wrapper, pre);
+                        wrapper.appendChild(pre);
+                    }
+                    hljs.highlightElement(block);
+                });
+                if (window.Noxss && Noxss.Typography) {
+                    Noxss.Typography.initCodeBlocks();
+                }
+            }
+
+            // --- FUNÇÃO CORRIGIDA ---
+            function rebuildChatUIFromHistory(history) {
+                chatContainer.innerHTML = "";
+                const welcomeMessage = "Olá! Sou um chatbot com a tecnologia Gemini. Como posso te ajudar hoje?";
+                processBotResponse(addMessage("", "bot"), welcomeMessage);
+
+                history.forEach(turn => {
+                    if (turn.role === "user" && turn.parts[0].text.startsWith("Aqui está a documentação")) return;
+                    if (turn.role === "model" && turn.parts[0].text.startsWith("Entendido.")) return;
+
+                    // Junta todas as partes da mensagem em uma única string
+                    const fullMessageText = turn.parts.map(part => part.text).join("");
+
+                    if (turn.role === "user") {
+                        addMessage(fullMessageText, "user");
+                    } else if (turn.role === "model") {
+                        const botBubble = addMessage("", "bot");
+                        processBotResponse(botBubble, fullMessageText);
+                    }
+                });
+
+                updateDynamicContent();
+                setTimeout(() => {
+                    chatContainer.scrollTop = chatContainer.scrollHeight;
+                }, 100);
+            }
+
+            async function handleChatSubmit(e) {
+                e.preventDefault();
+                const userMessage = messageInput.value.trim();
+                if (!userMessage) return;
+
+                addMessage(userMessage, "user");
+                messageInput.value = "";
+                messageInput.disabled = true;
+                sendButton.disabled = true;
+
+                const loadingBubble = addMessage(`<div class="typing-indicator"><div class="noxss-spinner"><div class="noxss-spinner-point-1"></div><div class="noxss-spinner-point-2"></div><div class="noxss-spinner-point-3"></div></div><span>Gemini está pensando...</span></div>`, "bot");
+
+                try {
+                    const result = await chat.sendMessageStream(userMessage);
+                    let fullResponseText = "";
+                    loadingBubble.innerHTML = "";
+
+                    for await (const chunk of result.stream) {
+                        const chunkText = chunk.text();
+                        fullResponseText += chunkText;
+                        loadingBubble.innerText = fullResponseText;
+                        chatContainer.scrollTop = chatContainer.scrollHeight;
+                    }
+                    processBotResponse(loadingBubble, fullResponseText);
+                } catch (error) {
+                    console.error("Erro ao contatar a API do Gemini:", error);
+                    const errorMessage = "Desculpe, ocorreu um erro ao processar sua solicitação.";
+                    processBotResponse(loadingBubble, `> **Erro:** ${errorMessage}`);
+                    if (window.Noxss && Noxss.Toasts) {
+                        Noxss.Toasts.show({ message: errorMessage, status: "danger" });
+                    }
+                } finally {
+                    messageInput.disabled = false;
+                    sendButton.disabled = false;
+                    messageInput.focus();
+                    chatContainer.scrollTop = chatContainer.scrollHeight;
+                    updateDynamicContent();
+                }
+            }
+
+            function startNewChatSession(history) {
+                chat = model.startChat({
+                    history,
+                    generationConfig: { maxOutputTokens: 60192 },
+                    safetySettings: [
+                        { category: HarmCategory.HARM_CATEGORY_HARASSMENT, threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE },
+                        { category: HarmCategory.HARM_CATEGORY_HATE_SPEECH, threshold: HarmBlockThreshold.BLOCK_MEDIUM_AND_ABOVE }
+                    ]
+                });
+            }
+
+            async function initializeChatApp() {
+                try {
+                    const [docResponse, promptResponse] = await Promise.all([fetch("./doc.txt"), fetch("./prompt.txt")]);
+                    if (!docResponse.ok || !promptResponse.ok) throw new Error(`Erro ao carregar arquivos.`);
+                    const docContent = await docResponse.text();
+                    const promptContent = await promptResponse.text();
+                    systemInstruction = "Aqui está a documentação da biblioteca Noxss para sua referência:\n\n" + docContent + "\n\n\n" + promptContent;
+                } catch (error) {
+                    console.error("Erro fatal:", error);
+                    addMessage("<strong>Erro:</strong> Não foi possível carregar os arquivos base.", "bot");
+                    return;
+                }
+
+                const initialHistory = [
+                    { role: "user", parts: [{ text: systemInstruction }] },
+                    { role: "model", parts: [{ text: "Entendido. Estou ciente de minhas capacidades e da documentação. Estou pronto para ajudar." }] }
+                ];
+
+                const genAI = new GoogleGenerativeAI(API_KEY);
+                model = genAI.getGenerativeModel({
+                    model: MODEL_NAME,
+                    systemInstruction: { role: "user", parts: [{ text: systemInstruction }] }
+                });
+
+                startNewChatSession(initialHistory);
+                rebuildChatUIFromHistory(initialHistory);
+
+                chatForm.addEventListener("submit", handleChatSubmit);
+                downloadBtn.addEventListener("click", handleDownloadHistory);
+                uploadBtn.addEventListener("click", () => fileInput.click());
+                fileInput.addEventListener("change", handleFileSelected);
+                messageInput.focus();
+            }
+
+            async function handleDownloadHistory() {
+                if (!chat) return;
+                const historyToSave = await chat.getHistory();
+                const historyJson = JSON.stringify(historyToSave, null, 2);
+                const blob = new Blob([historyJson], { type: "application/json" });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.href = url;
+                a.download = `chat-history-${new Date().toISOString()}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            }
+
+            function handleFileSelected(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = e => {
+                    try {
+                        const loadedHistory = JSON.parse(e.target.result);
+                        if (!Array.isArray(loadedHistory) || loadedHistory.some(turn => !turn.role || !turn.parts)) {
+                            throw new Error("Formato de histórico inválido.");
+                        }
+                        startNewChatSession(loadedHistory);
+                        rebuildChatUIFromHistory(loadedHistory);
+                        Noxss.Toasts.show({ message: "Histórico carregado com sucesso!", status: "success" });
+                    } catch (error) {
+                        console.error("Erro ao carregar histórico:", error);
+                        Noxss.Toasts.show({ message: "Falha ao carregar o arquivo. Verifique se é um JSON válido.", status: "danger" });
+                    }
+                };
+                reader.readAsText(file);
+                event.target.value = null;
+            }
+
+            document.addEventListener("DOMContentLoaded", () => {
+                updateDynamicContent();
+                initializeChatApp();
+            });
+        </script>
+    </body>
+</html>

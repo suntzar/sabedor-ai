@@ -1,0 +1,146 @@
+/* noxss/css/noxss.css */
+
+/* -------------------------------------------------------------------------- */
+/*                              NOXSS: VARI�VEIS GLOBAIS                      */
+/* -------------------------------------------------------------------------- */
+:root {
+    --noxss-bg-main: #181818;
+    --noxss-bg-surface: #202020;
+    --noxss-bg-elements: #262626;
+
+    --noxss-text-primary: #c9d1d9;
+    --noxss-text-secondary: #8b949e;
+    --noxss-text-on-accent: #ffffff;
+
+    --noxss-border-color: #383838;
+
+    --noxss-accent-primary: #58a6ff;
+    --noxss-accent-primary-rgb: 88, 166, 255;
+
+    --noxss-icon-color: var(--noxss-text-secondary);
+    --noxss-focus-ring-color: rgba(var(--noxss-accent-primary-rgb), 0.25);
+
+    --noxss-font-family-base: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+    --noxss-border-radius-base: 6px;
+}
+
+/* Reset b�sico (opcional, mas bom para consistncia do componente) */
+.noxss-player-compact *,
+.noxss-player-compact *::before,
+.noxss-player-compact *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* -------------------------------------------------------------------------- */
+/*                        NOXSS: COMPONENTE PLAYER COMPACTO                   */
+/* -------------------------------------------------------------------------- */
+.noxss-player-compact {
+    font-family: var(--noxss-font-family-base);
+    background-color: var(--noxss-bg-elements);
+    color: var(--noxss-text-primary); /* Cor de texto base para o player */
+    border-radius: var(--noxss-border-radius-base);
+    padding: 12px; /* Padding interno do player */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--noxss-border-color);
+    width: 100%;
+    max-width: 600px; /* Largura m�xima padro, pode ser sobrescrita */
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    overflow: hidden; /* Para garantir que o conte�do no vaze */
+}
+
+.noxss-player-compact .noxss-album-art {
+    border-radius: var(--noxss-border-radius-base);
+    object-fit: cover;
+    background-color: var(--noxss-bg-surface); /* Placeholder se a imagem no carregar */
+    width: 50px;
+    height: 50px;
+    flex-shrink: 0; /* No encolher a arte */
+}
+
+.noxss-player-compact .noxss-track-info {
+    flex-grow: 1; /* Ocupa o espa�o restante */
+    min-width: 0; /* Essencial para text-overflow: ellipsis funcionar */
+}
+
+.noxss-player-compact .noxss-track-info .noxss-title {
+    font-size: 1em; /* Ajustado para Noxss */
+    font-weight: 600;
+    color: var(--noxss-text-primary);
+    margin-bottom: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.noxss-player-compact .noxss-track-info .noxss-artist {
+    font-size: 0.85em; /* Ajustado para Noxss */
+    color: var(--noxss-text-secondary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.noxss-player-compact .noxss-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px; /* Espa�amento entre botes de controle */
+    flex-shrink: 0; /* No encolher os controles */
+}
+
+.noxss-player-compact .noxss-controls .noxss-control-button {
+    background: transparent;
+    border: none;
+    color: var(--noxss-icon-color); /* Cor padro dos �cones/SVGs */
+    padding: 8px;
+    border-radius: 35%;
+    cursor: pointer;
+    transition:
+        color 0.2s ease,
+        background-color 0.2s ease,
+        box-shadow 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px; /* Tamanho fixo para os botes */
+    height: 40px;
+}
+
+.noxss-player-compact .noxss-controls .noxss-control-button svg,
+.noxss-player-compact .noxss-controls .noxss-control-button .feather {
+    /* Para SVGs diretos e Feather Icons */
+    width: 20px; /* Tamanho padro para �cones de skip */
+    height: 20px;
+    stroke: currentColor; /* Herda a cor do boto */
+}
+
+.noxss-player-compact .noxss-controls .noxss-control-button.noxss-play-pause svg {
+    width: 24px; /* Tamanho maior para o �cone de play/pause */
+    height: 24px;
+}
+
+.noxss-player-compact .noxss-controls .noxss-control-button:hover:not(:disabled) {
+    color: var(--noxss-accent-primary);
+}
+
+.noxss-player-compact .noxss-controls .noxss-control-button:focus:not(:disabled) {
+    color: var(--noxss-text-primary);
+    outline: none;
+}
+
+.noxss-player-compact .noxss-controls .noxss-control-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.noxss-player-compact .noxss-controls .noxss-control-button.noxss-play-pause.noxss-active {
+    color: var(--noxss-accent-primary); /* SVG herda esta cor */
+}
+
+.noxss-player-compact .noxss-controls .noxss-control-button.noxss-play-pause.noxss-active:hover:not(:disabled) {
+    color: var(--noxss-accent-primary);
+}

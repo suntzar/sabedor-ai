@@ -1,0 +1,312 @@
+/* packages/css/noxss-typography.css (Versão Aprimorada) */
+
+/* -------------------------------------------------------------------------- */
+/*             NOXSS TYPOGRAPHY: VARIÁVEIS GLOBAIS E DE COMPONENTE              */
+/* -------------------------------------------------------------------------- */
+:root {
+    /* Fontes: Padrões atualizados, inspirados no "App Mockup", mantendo a personalização. */
+    --noxss-font-family-base: var(--font-family-base, "Roboto", system-ui, -apple-system, "Segoe UI", sans-serif);
+    --noxss-font-family-monospace: var(--font-family-monospace, "Fira Code", "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace);
+
+    /* Cores de Texto e Fundo (base da noxss) */
+    --noxss-text-primary: var(--text-primary, #c9d1d9);
+    --noxss-text-secondary: var(--text-secondary, #8b949e);
+    --noxss-bg-main: var(--bg-main, #181818);
+    --noxss-bg-surface: var(--bg-surface, #202020);
+    --noxss-border-color: var(--border-color, #383838);
+
+    /* Cores de Destaque (base da noxss) */
+    --noxss-accent-primary: var(--accent-primary, #58a6ff);
+    --noxss-accent-primary-hover: var(--accent-primary-hover, #79c0ff);
+    --noxss-accent-primary-rgb: var(--accent-primary-rgb, 88, 166, 255);
+
+    /* Novas variáveis para maior controle tipográfico */
+    --noxss-heading-color: var(--heading-color, #e0e0e0); /* Cor principal para a maioria dos títulos */
+    --noxss-heading-accent-color: var(--heading-accent-color, var(--noxss-accent-primary)); /* Cor especial para H3 */
+    --noxss-code-bg: var(--code-bg, #212121); /* Fundo para blocos de código <pre> */
+    --noxss-code-inline-bg: var(--code-inline-bg, rgba(var(--noxss-accent-primary-rgb), 0.1)); /* Fundo para <code> inline */
+}
+
+/* -------------------------------------------------------------------------- */
+/*                      NOXSS TYPOGRAPHY: ESTILOS BASE                        */
+/* -------------------------------------------------------------------------- */
+body {
+    font-family: var(--noxss-font-family-base);
+    line-height: 1.6;
+    color: var(--noxss-text-primary);
+    background-color: var(--noxss-bg-main);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                 CABEÇALHOS                                 */
+/* -------------------------------------------------------------------------- */
+h1,
+.h1,
+h2,
+.h2,
+h3,
+.h3,
+h4,
+.h4,
+h5,
+.h5,
+h6,
+.h6 {
+    /*margin-top: 1.5em;
+    margin-bottom: 0.8em;*/
+    font-weight: 500;
+    line-height: 1.3;
+    color: var(--noxss-heading-color);
+}
+
+h1,
+.h1 {
+    font-size: 2.2rem;
+    font-weight: 600; /* Mais peso para o título principal */
+    letter-spacing: -0.02em;
+}
+
+h2,
+.h2 {
+    font-size: 1.8rem;
+    padding-bottom: 0.3em;
+    border-bottom: 1px solid var(--noxss-border-color);
+}
+
+h3,
+.h3 {
+    font-size: 1.5rem;
+    color: var(--noxss-heading-accent-color); /* Estilo de destaque do App Mockup */
+}
+
+h4,
+.h4 {
+    font-size: 1.2rem;
+}
+
+h5,
+.h5 {
+    font-size: 1rem;
+    color: var(--noxss-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+h6,
+.h6 {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--noxss-text-secondary);
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                 PARÁGRAFOS                                 */
+/* -------------------------------------------------------------------------- */
+p {
+    margin-top: 0;
+    margin-bottom: 1.2em;
+}
+
+/*
+.lead {
+    font-size: 1.15rem;
+    font-weight: 300; / * Mais leve para dar um ar sofisticado * /
+    color: var(--noxss-text-primary);
+    margin-bottom: 1.5em;
+}
+*/
+
+/* -------------------------------------------------------------------------- */
+/*                                    LINKS                                   */
+/* -------------------------------------------------------------------------- */
+a {
+    color: var(--noxss-accent-primary);
+    text-decoration: none;
+    transition: color 0.2s ease-in-out;
+}
+
+a:hover {
+    color: var(--noxss-accent-primary-hover);
+    text-decoration: underline;
+}
+
+a:focus-visible {
+    outline: 2px solid var(--noxss-accent-primary);
+    outline-offset: 2px;
+    border-radius: var(--noxss-border-radius-base, 4px);
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                   LISTAS                                   */
+/* -------------------------------------------------------------------------- */
+ul,
+ol {
+    margin-top: 0;
+    margin-bottom: 1.25em;
+    padding-left: 25px;
+}
+
+li {
+    margin-bottom: 0.5em;
+}
+
+dt {
+    font-weight: 600;
+}
+
+dd {
+    margin-bottom: 0.75em;
+    margin-left: 0;
+    color: var(--noxss-text-secondary);
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                BLOCKQUOTES                                 */
+/* -------------------------------------------------------------------------- */
+blockquote {
+    margin: 1.5em 0;
+    padding: 10px 20px;
+    border-left: 4px solid var(--noxss-accent-primary);
+    background-color: var(--noxss-bg-surface);
+    color: var(--noxss-text-secondary);
+    font-style: italic;
+    border-radius: 0 var(--noxss-border-radius-base, 6px) var(--noxss-border-radius-base, 6px) 0;
+}
+
+blockquote p:last-child {
+    margin-bottom: 0;
+}
+
+blockquote footer {
+    display: block;
+    margin-top: 1em;
+    font-style: normal;
+    font-size: 0.9em;
+}
+
+blockquote footer::before {
+    content: "— ";
+}
+
+/* -------------------------------------------------------------------------- */
+/*                                   CÓDIGO                                   */
+/* -------------------------------------------------------------------------- */
+code,
+kbd,
+samp,
+pre {
+    font-family: var(--noxss-font-family-monospace);
+    font-size: 0.9em;
+}
+
+/* Código Inline: Mantém o excelente estilo da noxss */
+code {
+    color: var(--noxss-accent-primary);
+    background-color: var(--noxss-code-inline-bg);
+    padding: 0.2em 0.4em;
+    border-radius: 4px;
+    word-wrap: break-word;
+}
+
+a > code {
+    color: inherit;
+}
+
+/* Bloco de Código: Adota o estilo moderno do "App Mockup" */
+pre {
+    display: block;
+    margin: 1.5em 0;
+    padding: 20px;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--noxss-text-primary);
+    background-color: var(--noxss-code-bg);
+    border: 1px solid var(--noxss-border-color);
+    border-radius: var(--noxss-border-radius-base, 8px);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+/*
+ * NOTA: O estilo <pre> acima é um container.
+ * Para syntax highlighting, aplique uma biblioteca como Highlight.js ou Prism.
+ * O tema do syntax highlighter (ex: atom-one-dark.css) controlará as cores internas do código.
+*/
+pre code {
+    padding: 0;
+    font-size: inherit;
+    color: inherit; /* Permite que o tema do highlighter assuma o controle */
+    background-color: transparent;
+    border-radius: 0;
+}
+
+kbd {
+    padding: 0.2em 0.45em;
+    color: var(--noxss-text-primary);
+    background-color: var(--noxss-bg-surface);
+    border: 1px solid var(--noxss-border-color);
+    border-bottom-width: 2px;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+/* -------------------------------------------------------------------------- */
+/*                            LINHA HORIZONTAL (HR)                           */
+/* -------------------------------------------------------------------------- */
+hr {
+    margin: 2.5em 0;
+    border: 0;
+    border-top: 1px solid var(--noxss-border-color);
+    opacity: 0.8;
+}
+
+/* -------------------------------------------------------------------------- */
+/*                             OUTROS ELEMENTOS TEXTUAIS                      */
+/* -------------------------------------------------------------------------- */
+mark,
+.mark {
+    padding: 0.15em 0.3em;
+    background-color: #ffd035;
+    color: #181818;
+    border-radius: 3px;
+}
+
+small,
+.small {
+    font-size: 0.85em;
+    color: var(--noxss-text-secondary);
+}
+
+/* Mantém o estilo de destaque para strong/b da noxss */
+strong,
+b {
+    font-weight: 600;
+    color: var(--noxss-accent-primary);
+}
+
+em,
+i {
+    font-style: italic;
+}
+
+abbr[title] {
+    text-decoration: underline dotted;
+    text-decoration-color: var(--noxss-text-secondary);
+    cursor: help;
+}
+
+sub,
+sup {
+    position: relative;
+    font-size: 0.75em;
+    line-height: 0;
+    vertical-align: baseline;
+}
+sub {
+    bottom: -0.25em;
+}
+sup {
+    top: -0.5em;
+}

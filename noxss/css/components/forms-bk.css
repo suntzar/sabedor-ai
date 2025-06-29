@@ -1,0 +1,177 @@
+/* ==========================================================================
+   Noxss Library: Forms Component
+   - Estilos para elementos de formulário (inputs, selects, checkboxes, etc.).
+   - Versão: 1.0
+   - Depende de: core.css
+   ========================================================================== */
+
+/* ---------------------------------- */
+/* 1. Estrutura e Labels              */
+/* ---------------------------------- */
+
+.noxss-form-group {
+    margin-bottom: 1.5rem; /* Espaçamento padrão entre campos */
+}
+
+.noxss-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.9em;
+    font-weight: 500;
+    color: var(--noxss-text-secondary);
+}
+
+/* ---------------------------------- */
+/* 2. Inputs, Textareas e Selects     */
+/* ---------------------------------- */
+
+.noxss-input,
+.noxss-select,
+.noxss-textarea {
+    display: block;
+    width: 100%;
+    
+    padding: 0.8rem 1rem;
+    font-family: var(--noxss-font-family-base);
+    font-size: 1rem;
+    line-height: 1.5;
+    
+    color: var(--noxss-text-primary);
+    background-color: var(--noxss-bg-main);
+    background-clip: padding-box; /* Padrão do Bootstrap, bom para consistência */
+    
+    border: 1px solid var(--noxss-border-color);
+    border-radius: var(--noxss-border-radius-base);
+    
+    transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    
+    /* Remove a aparência nativa, especialmente em iOS */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+.noxss-input::placeholder,
+.noxss-textarea::placeholder {
+    color: var(--noxss-text-secondary);
+    opacity: 0.7;
+}
+
+.noxss-input:focus,
+.noxss-select:focus,
+.noxss-textarea:focus {
+    outline: none;
+    border-color: var(--noxss-accent-primary);
+    box-shadow: 0 0 0 3px var(--noxss-focus-ring-color);
+}
+
+.noxss-textarea {
+    min-height: 120px;
+    resize: vertical; /* Permite redimensionamento apenas vertical */
+}
+
+/* Estilo específico para o <select> para adicionar a seta customizada */
+.noxss-select {
+    /* O SVG da seta é codificado em URL e usa 'currentColor' para herdar a cor do texto */
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='currentColor' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 16px 12px;
+    padding-right: 2.5rem; /* Espaço extra para a seta não sobrepor o texto */
+}
+
+/* ---------------------------------- */
+/* 3. Checkboxes e Radio Buttons      */
+/* ---------------------------------- */
+
+.noxss-check,
+.noxss-radio {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding-left: 2em; /* Espaço para o controle customizado */
+    margin-bottom: 0.75rem;
+    min-height: 1.5rem;
+    cursor: pointer;
+    user-select: none;
+}
+
+/* Esconde o input original */
+.noxss-check input,
+.noxss-radio input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+/* Cria o controle customizado (a "caixa" ou o "círculo") */
+.noxss-check .noxss-check-control,
+.noxss-radio .noxss-radio-control {
+    position: absolute;
+    top: 0.1em;
+    left: 0;
+    height: 1.3em;
+    width: 1.3em;
+    background-color: var(--noxss-bg-main);
+    border: 1px solid var(--noxss-border-color);
+    transition: all 150ms ease;
+}
+
+.noxss-radio .noxss-radio-control {
+    border-radius: 50%; /* Rádio é circular */
+}
+
+.noxss-check .noxss-check-control {
+    border-radius: 4px; /* Checkbox é quadrado com bordas suaves */
+}
+
+/* Estilo no hover */
+.noxss-check:hover input ~ .noxss-check-control,
+.noxss-radio:hover input ~ .noxss-radio-control {
+    border-color: var(--noxss-text-secondary);
+}
+
+/* Estilo quando o input está checado */
+.noxss-check input:checked ~ .noxss-check-control,
+.noxss-radio input:checked ~ .noxss-radio-control {
+    background-color: var(--noxss-accent-primary);
+    border-color: var(--noxss-accent-primary);
+}
+
+/* Cria o indicador (o "check" ou o "ponto") usando ::after */
+.noxss-check-control::after,
+.noxss-radio-control::after {
+    content: "";
+    position: absolute;
+    display: none; /* Oculto por padrão */
+}
+
+/* Mostra o indicador quando checado */
+.noxss-check input:checked ~ .noxss-check-control::after,
+.noxss-radio input:checked ~ .noxss-radio-control::after {
+    display: block;
+}
+
+/* Estilo do indicador do checkbox (um "V") */
+.noxss-check .noxss-check-control::after {
+    left: 0.4em;
+    top: 0.15em;
+    width: 0.3em;
+    height: 0.7em;
+    border: solid var(--noxss-text-on-accent);
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+/* Estilo do indicador do radio (um círculo) */
+.noxss-radio .noxss-radio-control::after {
+    top: 50%;
+    left: 50%;
+    width: 0.6em;
+    height: 0.6em;
+    border-radius: 50%;
+    background: var(--noxss-text-on-accent);
+    transform: translate(-50%, -50%);
+}
