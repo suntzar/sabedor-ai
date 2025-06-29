@@ -84,7 +84,7 @@
                 gap: 0.5rem;
                 margin-left: auto; /* Alinha os botões à direita */
             }
-            
+
             /* Estilos dos Balões de Mensagem */
             .message-bubble {
                 padding: 0.75rem 1.25rem;
@@ -116,6 +116,7 @@
             .chat-message--bot .message-bubble {
                 background-color: var(--noxss-bg-surface);
                 border: 1px solid var(--noxss-border-color);
+                overflow-x: auto;
             }
             .message-bubble p {
                 margin: 0;
@@ -412,7 +413,6 @@
                     }
                     // Processa a resposta final sem o cursor
                     processBotResponse(loadingBubble, fullResponseText);
-
                 } catch (error) {
                     console.error("Erro ao contatar a API do Gemini:", error);
                     processBotResponse(loadingBubble, `> **Erro:** Desculpe, ocorreu um erro ao processar sua solicitação.`);
@@ -555,20 +555,22 @@
                 history.forEach(turn => {
                     // Ignora o prompt inicial do sistema para não poluir a UI
                     if (turn.role === "user" && turn.parts[0].text && turn.parts[0].text.startsWith("Aqui está a documentação")) return;
-                    
+
                     const bubble = addMessage(turn.role === "user" ? "user" : "bot");
-                    
+
                     // Concatena todas as partes de texto. A reconstrução de imagens do histórico não é suportada.
                     const fullText = turn.parts.map(part => part.text || "").join("\n");
                     if (fullText) {
                         processBotResponse(bubble, fullText);
                     }
                 });
-                
+
                 updateDynamicContent();
-                setTimeout(() => { chatContainer.scrollTop = chatContainer.scrollHeight; }, 100);
+                setTimeout(() => {
+                    chatContainer.scrollTop = chatContainer.scrollHeight;
+                }, 100);
             }
-            
+
             // --- 9. INICIALIZAÇÃO DA APLICAÇÃO ---
 
             /**
@@ -614,7 +616,6 @@
 
             // Ponto de entrada: espera o DOM estar pronto para iniciar a aplicação.
             document.addEventListener("DOMContentLoaded", initializeChatApp);
-
         </script>
     </body>
 </html>

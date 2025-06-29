@@ -125,7 +125,6 @@ table {
     background-color: var(--noxss-bg-surface);
     box-shadow: var(--noxss-shadow-sm);
     overflow: hidden; /* Garante que o border-radius seja aplicado às células de canto */
-    overflow-x: scroll;
 }
 
 th, td {
