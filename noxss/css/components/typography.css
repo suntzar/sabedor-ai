@@ -197,7 +197,7 @@ code {
 .noxss-code-block .noxss-copy-btn:hover { color: var(--noxss-text-primary); }
 .noxss-code-block .noxss-copy-btn:focus-visible { outline: 2px solid var(--noxss-focus-ring-color); outline-offset: 1px; }
 .noxss-code-block .noxss-copy-btn svg { width: 18px; height: 18px; stroke-width: 2.5; }
-.noxss-code-block .noxss-copy-btn.copied { color: var(--noxss-color-success); }
+.noxss-code-block .noxss-copy-btn.copied { color: var(--noxss-accent-primary); }
 
 .noxss-code-block pre {
     margin: 0;

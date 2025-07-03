@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Chat com Gemini & Noxss</title>
+        <title>Chat com V-Oito & Noxss</title>
 
         <!-- ========================================================================= -->
         <!-- 1. DEPENDÊNCIAS DA NOXSS E DO CHAT                                        -->
@@ -210,7 +210,7 @@
                 <div id="image-preview-container" style="display: none"></div>
                 <!-- Formulário de envio -->
                 <form id="chat-form" class="noxss-form-group">
-                    <textarea type="text" id="message-input" class="noxss-input" placeholder="Pergunte algo ao Gemini..." autocomplete="off" rows="1"></textarea>
+                    <textarea type="text" id="message-input" class="noxss-input" placeholder="Pergunte algo ao V-Oito..." autocomplete="off" rows="1"></textarea>
                     <button type="button" id="image-upload-btn" class="noxss-btn noxss-btn--secondary" aria-label="Anexar imagens"><i data-feather="paperclip" class="noxss-icon"></i></button>
                     <input type="file" id="image-file-input" accept="image/*" style="display: none" multiple />
                     <button id="sendButton" type="submit" class="noxss-btn noxss-btn--primary" aria-label="Enviar mensagem"><i data-feather="send" class="noxss-icon"></i></button>
@@ -391,7 +391,7 @@
 
                 // 3. Mostra o indicador de "pensando"
                 const loadingBubble = addMessage("bot");
-                loadingBubble.innerHTML = `<div class="typing-indicator"><div class="noxss-spinner"><div class="noxss-spinner-point-1"></div><div class="noxss-spinner-point-2"></div><div class="noxss-spinner-point-3"></div></div><span>Gemini está pensando...</span></div>`;
+                loadingBubble.innerHTML = `<div class="typing-indicator"><div class="noxss-spinner"><div class="noxss-spinner-point-1"></div><div class="noxss-spinner-point-2"></div><div class="noxss-spinner-point-3"></div></div><span>V-Oito está pensando...</span></div>`;
 
                 try {
                     // 4. Prepara e envia os dados para a API
@@ -600,7 +600,7 @@
 
                 // Inicia a primeira sessão de chat e exibe a mensagem de boas-vindas
                 startNewChatSession([]);
-                processBotResponse(addMessage("bot"), "Olá! Sou o Sabedor, um chatbot com a tecnologia Gemini. Como posso te ajudar hoje?");
+                processBotResponse(addMessage("bot"), "Olá! Sou o Sabedor, um chatbot com a tecnologia V-Oito. Como posso te ajudar hoje?");
 
                 // Anexa os event listeners aos elementos da UI
                 chatForm.addEventListener("submit", handleChatSubmit);
